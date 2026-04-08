@@ -27,6 +27,7 @@
           <a href="./index.html#explorer">Explorer</a>
           <a href="./index.html#visualize">Visualize</a>
           <a href="./submit.html" aria-current="page">Submit a paper</a>
+          <a href="./status.html">Track a job</a>
           <a href="./index.html#governance">Governance</a>
         </nav>
       </header>
@@ -99,8 +100,8 @@
                   </div>
 
                   <div class="filter-group">
-                    <label for="submitter-email">Email for result return</label>
-                    <input id="submitter-email" name="submitter_email" type="email" required />
+                    <label for="submitter-email">Email for backup contact</label>
+                    <input id="submitter-email" name="submitter_email" type="email" />
                   </div>
 
                   <div class="filter-group">
@@ -214,6 +215,19 @@
                 </div>
 
                 <div id="submission-status" class="submit-status" role="status" aria-live="polite"></div>
+
+                <div id="submission-next-step" class="status-link-panel" hidden>
+                  <p class="status-link-label">Private status link</p>
+                  <p class="status-link-copy">
+                    Bookmark this page if you want to check progress later without using email.
+                  </p>
+                  <div class="status-link-actions">
+                    <a id="status-link-anchor" class="button button-primary" href="./status.html">Open private status page</a>
+                    <button id="copy-status-link" class="button button-secondary" type="button">
+                      Copy private link
+                    </button>
+                  </div>
+                </div>
               </form>
             </section>
 
@@ -222,8 +236,10 @@
                 <h3>What happens after upload</h3>
                 <p>
                   The restricted backend stores the PDF privately, creates a job record,
-                  generates a searchable PDF, and extracts canonical OCR text. Public
-                  release, if any, is handled separately and conservatively.
+                  generates a searchable PDF, and extracts canonical OCR text. After
+                  submission, this site provides a private status page for progress
+                  tracking and artifact download. Public release, if any, is handled
+                  separately and conservatively.
                 </p>
               </article>
               <article class="governance-card">

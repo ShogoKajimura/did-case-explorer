@@ -6,8 +6,13 @@ const statusBox = document.querySelector("#submission-status");
 const configNote = document.querySelector("#submission-config-note");
 const turnstileShell = document.querySelector("#turnstile-shell");
 const turnstileWidget = document.querySelector("#turnstile-widget");
+const nextStepPanel = document.querySelector("#submission-next-step");
+const statusLinkAnchor = document.querySelector("#status-link-anchor");
+const copyStatusLinkButton = document.querySelector("#copy-status-link");
 
+const RECENT_JOBS_KEY = "didCaseExplorerRecentJobs";
 let turnstileWidgetId = null;
+let redirectTimerId = null;
 
 function configuredIntakeUrl() {
   const url = submissionPortalConfig.intakeUrl?.trim() || "";
@@ -30,6 +35,49 @@ function setStatus(message, tone = "neutral") {
   statusBox.dataset.tone = tone;
 }
 
+function buildStatusUrl(jobId, accessToken) {
+  const url = new URL("./status.html", window.location.href);
+  url.searchParams.set("job", jobId);
+  url.hash = `token=${encodeURIComponent(accessToken)}`;
+  return url.toString();
+}
+
+function readRecentJobs() {
+  try {
+    const raw = window.localStorage.getItem(RECENT_JOBS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (error) {
+    console.warn("Failed to read recent jobs from localStorage.", error);
+    return [];
+  }
+}
+
+function saveRecentJob(entry) {
+  const jobs = readRecentJobs().filter((job) => job.jobId !== entry.jobId);
+  jobs.unshift(entry);
+  window.localStorage.setItem(RECENT_JOBS_KEY, JSON.stringify(jobs.slice(0, 8)));
+}
+
+function showNextStepPanel(statusUrl) {
+  nextStepPanel.hidden = false;
+  statusLinkAnchor.href = statusUrl;
+  if (redirectTimerId) {
+    window.clearTimeout(redirectTimerId);
+  }
+  redirectTimerId = window.setTimeout(() => {
+    window.location.assign(statusUrl);
+  }, 1400);
+}
+
+function hideNextStepPanel() {
+  nextStepPanel.hidden = true;
+  statusLinkAnchor.href = "./status.html";
+  if (redirectTimerId) {
+    window.clearTimeout(redirectTimerId);
+    redirectTimerId = null;
+  }
+}
+
 function renderConfigBanner() {
   const intakeUrl = configuredIntakeUrl();
   if (!intakeUrl) {
@@ -42,7 +90,7 @@ function renderConfigBanner() {
 
   configNote.dataset.tone = "neutral";
   configNote.textContent =
-    "This form posts to a restricted OCR backend. Submitted PDFs are not published on the public explorer by default.";
+    "This form posts to a restricted OCR backend. After upload, a private status page will track OCR progress and artifact availability.";
 }
 
 function loadTurnstile() {
@@ -83,6 +131,23 @@ async function initTurnstile() {
   }
 }
 
+async function copyStatusLink() {
+  const href = statusLinkAnchor.href;
+  if (!href || href.endsWith("/status.html")) {
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(href);
+    copyStatusLinkButton.textContent = "Copied";
+    window.setTimeout(() => {
+      copyStatusLinkButton.textContent = "Copy private link";
+    }, 1800);
+  } catch (error) {
+    console.error(error);
+    setStatus("Could not copy the private status link. You can still open it directly.", "warning");
+  }
+}
+
 async function submitForm(event) {
   event.preventDefault();
   const intakeUrl = configuredIntakeUrl();
@@ -108,6 +173,7 @@ async function submitForm(event) {
   }
 
   submitButton.disabled = true;
+  hideNextStepPanel();
   setStatus("Uploading PDF to the restricted OCR backend…", "neutral");
 
   try {
@@ -120,17 +186,30 @@ async function submitForm(event) {
     if (!response.ok) {
       throw new Error(payload.detail || `Submission failed with status ${response.status}.`);
     }
+    if (!payload.jobId || !payload.accessToken) {
+      throw new Error("Submission succeeded but the backend did not return a private status token.");
+    }
+
+    const statusUrl = buildStatusUrl(payload.jobId, payload.accessToken);
+    saveRecentJob({
+      jobId: payload.jobId,
+      accessToken: payload.accessToken,
+      statusUrl,
+      createdAt: new Date().toISOString(),
+    });
 
     form.reset();
     if (siteKey && window.turnstile && turnstileWidgetId !== null) {
       window.turnstile.reset(turnstileWidgetId);
     }
     setStatus(
-      `Submission queued successfully. Job ID: ${payload.jobId}. Keep this ID if you need to reference the upload later.`,
+      `Submission queued successfully. Redirecting to the private status page for job ${payload.jobId}…`,
       "success",
     );
+    showNextStepPanel(statusUrl);
   } catch (error) {
     console.error(error);
+    hideNextStepPanel();
     setStatus(error.message || "Submission failed.", "error");
   } finally {
     submitButton.disabled = false;
@@ -139,4 +218,5 @@ async function submitForm(event) {
 
 renderConfigBanner();
 initTurnstile();
+copyStatusLinkButton?.addEventListener("click", copyStatusLink);
 form.addEventListener("submit", submitForm);

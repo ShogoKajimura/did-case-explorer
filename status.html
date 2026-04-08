@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Track a Job | DID Multilingual Case Explorer</title>
+    <meta
+      name="description"
+      content="Private status page for restricted OCR submissions to the DID/MPD companion explorer."
+    />
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="./index.html#top" aria-label="DID multilingual case explorer home">
+          <span class="brand-mark">D</span>
+          <span class="brand-text">
+            <strong>DID Multilingual Case Explorer</strong>
+            <small>Private OCR status tracking</small>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="./index.html#overview">Overview</a>
+          <a href="./index.html#contributors">Contributors</a>
+          <a href="./index.html#explorer">Explorer</a>
+          <a href="./index.html#visualize">Visualize</a>
+          <a href="./submit.html">Submit a paper</a>
+          <a href="./status.html" aria-current="page">Track a job</a>
+          <a href="./index.html#governance">Governance</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero submit-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Private status link</p>
+            <h1>Track OCR progress and retrieve artifacts when they are ready.</h1>
+            <p class="hero-text">
+              Each submission receives a private status link. Keep that link or the paired
+              job ID and access token if you want to return later without email.
+            </p>
+            <div class="hero-badges">
+              <span class="pill">Token-protected status</span>
+              <span class="pill">Searchable PDF download</span>
+              <span class="pill">Canonical text download</span>
+            </div>
+          </div>
+
+          <aside class="hero-panel">
+            <div class="panel-header">
+              <span>How this works</span>
+              <strong>The public site never exposes another contributor's file by job ID alone.</strong>
+            </div>
+            <div class="boundary-grid">
+              <article class="boundary-card boundary-card-public">
+                <h2>What you need</h2>
+                <ul>
+                  <li>The private link created right after submission</li>
+                  <li>Or the paired job ID and access token</li>
+                </ul>
+              </article>
+              <article class="boundary-card boundary-card-restricted">
+                <h2>Protected by design</h2>
+                <ul>
+                  <li>Job IDs alone cannot reveal status or files</li>
+                  <li>Artifacts stay on the restricted backend unless you have the token</li>
+                </ul>
+              </article>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section submit-section">
+          <div class="submit-layout">
+            <section class="submit-card">
+              <div class="section-header submit-header">
+                <div>
+                  <p class="eyebrow">Status lookup</p>
+                  <h2>Open a private job status page.</h2>
+                </div>
+                <p class="section-note">
+                  If you opened this page from a private status link, the form below will
+                  be populated automatically and polling will begin immediately.
+                </p>
+              </div>
+
+              <div id="status-config-note" class="submit-banner" role="status"></div>
+
+              <form id="status-form" class="submission-form" novalidate>
+                <div class="form-grid">
+                  <div class="filter-group">
+                    <label for="status-job-id">Job ID</label>
+                    <input id="status-job-id" name="job_id" type="text" required />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="status-access-token">Access token</label>
+                    <input id="status-access-token" name="access_token" type="text" required />
+                  </div>
+                </div>
+
+                <div class="submit-actions">
+                  <button id="status-load-button" class="button button-primary" type="submit">
+                    Load private status
+                  </button>
+                  <button id="status-copy-link" class="button button-secondary" type="button">
+                    Copy this private link
+                  </button>
+                </div>
+              </form>
+
+              <div id="status-message" class="submit-status" role="status" aria-live="polite">
+                Enter the job ID and access token, or open the private status link that was
+                generated after upload.
+              </div>
+
+              <section id="status-result" class="status-result" hidden>
+                <div class="status-card-header">
+                  <div>
+                    <p class="eyebrow">Restricted backend status</p>
+                    <h3 id="status-headline">Waiting for submission data</h3>
+                  </div>
+                  <span id="status-pill" class="status-pill">idle</span>
+                </div>
+
+                <dl class="status-meta-grid">
+                  <div class="status-meta-item">
+                    <dt>Original filename</dt>
+                    <dd id="status-original-filename">-</dd>
+                  </div>
+                  <div class="status-meta-item">
+                    <dt>Created</dt>
+                    <dd id="status-created-at">-</dd>
+                  </div>
+                  <div class="status-meta-item">
+                    <dt>Updated</dt>
+                    <dd id="status-updated-at">-</dd>
+                  </div>
+                  <div class="status-meta-item">
+                    <dt>Worker state</dt>
+                    <dd id="status-state">-</dd>
+                  </div>
+                </dl>
+
+                <div id="status-detail" class="status-detail-box">
+                  Waiting for a valid private job token.
+                </div>
+
+                <div class="status-download-grid">
+                  <button
+                    id="download-searchable-pdf"
+                    class="button button-primary"
+                    type="button"
+                    disabled
+                  >
+                    Download searchable PDF
+                  </button>
+                  <button
+                    id="download-canonical-text"
+                    class="button button-secondary"
+                    type="button"
+                    disabled
+                  >
+                    Download canonical text
+                  </button>
+                </div>
+              </section>
+            </section>
+
+            <aside class="submit-side">
+              <article class="governance-card">
+                <h3>Recent private jobs on this browser</h3>
+                <div id="recent-jobs" class="recent-jobs">
+                  <p class="section-note">No recent jobs are stored on this browser yet.</p>
+                </div>
+              </article>
+              <article class="governance-card">
+                <h3>Polling behavior</h3>
+                <p>
+                  Pending and processing jobs are polled automatically. Once OCR completes,
+                  the page stops polling and enables secure download actions.
+                </p>
+              </article>
+              <article class="governance-card">
+                <h3>Security boundary</h3>
+                <p>
+                  The token lives in the private link itself and is sent to the restricted
+                  backend only when this page requests status or downloads.
+                </p>
+              </article>
+            </aside>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>
+          Status tracking is private and token-gated. Public metadata release remains a
+          separate editorial decision.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="./status.js"></script>
+  </body>
+</html>
