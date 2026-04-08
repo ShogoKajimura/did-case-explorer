@@ -23,8 +23,10 @@
         </a>
         <nav class="nav">
           <a href="#overview">Overview</a>
+          <a href="#contributors">Contributors</a>
           <a href="#explorer">Explorer</a>
           <a href="#visualize">Visualize</a>
+          <a href="./submit.html">Submit a paper</a>
           <a href="#governance">Governance</a>
         </nav>
       </header>
@@ -46,6 +48,7 @@
             </p>
             <div class="hero-actions">
               <a class="button button-primary" href="#explorer">Preview explorer</a>
+              <a class="button button-secondary" href="./submit.html">Submit a paper</a>
               <a class="button button-secondary" href="./data/public-snapshot-2026-03-27.tsv"
                 >Download snapshot TSV</a
               >
@@ -89,6 +92,22 @@
 
         <section class="stats-strip" aria-label="Corpus overview metrics">
           <div id="stat-cards" class="stats-grid"></div>
+        </section>
+
+        <section class="section contributor-section" id="contributors">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Contributor directory</p>
+              <h2>Visible credit for the people who help expand the corpus.</h2>
+            </div>
+            <p class="section-note">
+              Contributors can opt in to have their name displayed here. If
+              they prefer, their profile can link out to a lab page, personal
+              site, ORCID, or project homepage.
+            </p>
+          </div>
+
+          <div id="contributor-cards" class="contributor-grid"></div>
         </section>
 
         <section class="section section-explorer" id="explorer">
@@ -282,7 +301,8 @@
         <p>
           Companion explorer shell for the multilingual DID case-literature
           review. Current build target: read-only public release with versioned
-          metadata boundary.
+          metadata boundary, plus a separate restricted submission and OCR
+          workflow.
         </p>
       </footer>
     </div>

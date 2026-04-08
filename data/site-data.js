@@ -6,6 +6,25 @@ export const heroBadges = [
   "OCR-aware public boundary",
 ];
 
+export const contributorDirectory = [
+  {
+    name: "Shogo Kajimura",
+    role: "Project lead",
+    affiliation: "DID multilingual case-literature review",
+    note: "Corpus curation, coding, OCR quality control, and manuscript development.",
+    url: "",
+  },
+];
+
+export const submissionPortalConfig = {
+  intakeUrl: "",
+  turnstileSiteKey: "",
+  maxUploadMb: 150,
+  acceptedFileTypes: ".pdf",
+  portalStatus: "setup_required",
+  contactEmail: "",
+};
+
 export const aggregateCards = [
   {
     label: "Retained sources",

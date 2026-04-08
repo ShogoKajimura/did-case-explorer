@@ -1,3 +1,5 @@
+import { contributorDirectory } from "./data/site-data.js";
+
 const FALLBACK_AGGREGATES = {
   snapshot: {
     version: "preview-shell",
@@ -32,6 +34,7 @@ const detailTitle = document.querySelector("#detail-title");
 const detailContent = document.querySelector("#detail-content");
 const visualCards = document.querySelector("#visual-cards");
 const snapshotPill = document.querySelector("#snapshot-pill");
+const contributorCards = document.querySelector("#contributor-cards");
 
 const state = {
   query: "",
@@ -131,6 +134,44 @@ function renderVisualCards() {
     card.series.forEach((item) => list.append(buildBarRow(item, maxValue)));
     article.append(list);
     visualCards.append(article);
+  });
+}
+
+function renderContributors() {
+  if (!contributorCards) {
+    return;
+  }
+
+  contributorCards.innerHTML = "";
+
+  if (!contributorDirectory.length) {
+    contributorCards.innerHTML = `
+      <article class="contributor-card contributor-card-empty">
+        <h3>Contributor directory will appear here</h3>
+        <p>
+          Names are shown only for contributors who explicitly opt in. Each entry can
+          optionally link to a lab page, ORCID profile, or personal homepage.
+        </p>
+      </article>
+    `;
+    return;
+  }
+
+  contributorDirectory.forEach((entry) => {
+    const article = document.createElement("article");
+    article.className = "contributor-card";
+    const heading = entry.url
+      ? `<a href="${entry.url}" target="_blank" rel="noreferrer">${entry.name}</a>`
+      : `<span>${entry.name}</span>`;
+    article.innerHTML = `
+      <div class="contributor-meta">
+        <span class="pill">${entry.role || "Contributor"}</span>
+        ${entry.affiliation ? `<small>${entry.affiliation}</small>` : ""}
+      </div>
+      <h3>${heading}</h3>
+      <p>${entry.note || "Contributed to corpus development and maintenance."}</p>
+    `;
+    contributorCards.append(article);
   });
 }
 
@@ -373,6 +414,7 @@ async function init() {
   renderHeroBadges();
   renderStatCards();
   renderVisualCards();
+  renderContributors();
   snapshotPill.textContent = `Version ${aggregates.snapshot.version}`;
 
   if (records.length > 0) {

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit a Paper | DID Multilingual Case Explorer</title>
+    <meta
+      name="description"
+      content="Submission portal for contributing DID/MPD case-literature PDFs to the restricted OCR and review workflow."
+    />
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="./index.html#top" aria-label="DID multilingual case explorer home">
+          <span class="brand-mark">D</span>
+          <span class="brand-text">
+            <strong>DID Multilingual Case Explorer</strong>
+            <small>Restricted contribution intake</small>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="./index.html#overview">Overview</a>
+          <a href="./index.html#contributors">Contributors</a>
+          <a href="./index.html#explorer">Explorer</a>
+          <a href="./index.html#visualize">Visualize</a>
+          <a href="./submit.html" aria-current="page">Submit a paper</a>
+          <a href="./index.html#governance">Governance</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero submit-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Restricted intake workflow</p>
+            <h1>Submit a paper for OCR, bibliographic triage, and later review.</h1>
+            <p class="hero-text">
+              This page is the public-facing intake surface for scanned or hard-to-access
+              DID/MPD case literature. Submitted PDFs are processed on a restricted backend
+              and are not made public through this site by default.
+            </p>
+            <div class="hero-badges">
+              <span class="pill">PDF only</span>
+              <span class="pill">Private OCR workflow</span>
+              <span class="pill">Opt-in contributor credit</span>
+            </div>
+          </div>
+
+          <aside class="hero-panel">
+            <div class="panel-header">
+              <span>Before you submit</span>
+              <strong>Use this route only when you can lawfully share the PDF.</strong>
+            </div>
+            <div class="boundary-grid">
+              <article class="boundary-card boundary-card-public">
+                <h2>Good candidates</h2>
+                <ul>
+                  <li>Non-English case reports or case series</li>
+                  <li>Scanned journal articles and theses</li>
+                  <li>Materials you authored or can lawfully share for research processing</li>
+                </ul>
+              </article>
+              <article class="boundary-card boundary-card-restricted">
+                <h2>Not uploaded publicly</h2>
+                <ul>
+                  <li>Copyrighted full text on the public explorer</li>
+                  <li>Private OCR artifacts without permission</li>
+                  <li>Contributor identity unless opt-in is selected</li>
+                </ul>
+              </article>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section submit-section">
+          <div class="submit-layout">
+            <section class="submit-card">
+              <div class="section-header submit-header">
+                <div>
+                  <p class="eyebrow">Contribution form</p>
+                  <h2>Submit one PDF at a time.</h2>
+                </div>
+                <p class="section-note">
+                  The public page posts to a separate restricted OCR backend. If that
+                  backend is not configured yet, the form will stay visible but submission
+                  will be disabled.
+                </p>
+              </div>
+
+              <div id="submission-config-note" class="submit-banner" role="status"></div>
+
+              <form id="submission-form" class="submission-form" novalidate>
+                <div class="form-grid">
+                  <div class="filter-group">
+                    <label for="submitter-name">Your name</label>
+                    <input id="submitter-name" name="submitter_name" type="text" required />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="submitter-email">Email for result return</label>
+                    <input id="submitter-email" name="submitter_email" type="email" required />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="submitter-affiliation">Affiliation</label>
+                    <input id="submitter-affiliation" name="submitter_affiliation" type="text" />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="languages">OCR language code(s)</label>
+                    <input
+                      id="languages"
+                      name="languages"
+                      type="text"
+                      placeholder="e.g. jpn+eng or fra+eng"
+                      required
+                    />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="paper-title">Paper title</label>
+                    <input id="paper-title" name="paper_title" type="text" />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="paper-authors">Authors</label>
+                    <input id="paper-authors" name="paper_authors" type="text" />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="paper-year">Year</label>
+                    <input id="paper-year" name="paper_year" type="text" inputmode="numeric" />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="paper-journal">Journal / source</label>
+                    <input id="paper-journal" name="paper_journal" type="text" />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="source-url">DOI or source URL</label>
+                    <input id="source-url" name="source_url" type="url" />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="contributor-display-name">Public contributor name</label>
+                    <input
+                      id="contributor-display-name"
+                      name="contributor_display_name"
+                      type="text"
+                      placeholder="Optional"
+                    />
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="contributor-link-url">Contributor homepage / lab link</label>
+                    <input
+                      id="contributor-link-url"
+                      name="contributor_link_url"
+                      type="url"
+                      placeholder="Optional"
+                    />
+                  </div>
+
+                  <div class="filter-group filter-group-wide">
+                    <label for="notes">Notes for the curator</label>
+                    <textarea
+                      id="notes"
+                      name="notes"
+                      rows="5"
+                      placeholder="Anything useful: likely case report, country, scan quality, issue numbers, missing pages, prior OCR problems, etc."
+                    ></textarea>
+                  </div>
+
+                  <div class="filter-group filter-group-wide">
+                    <label for="file">PDF upload</label>
+                    <input id="file" name="file" type="file" accept=".pdf,application/pdf" required />
+                  </div>
+                </div>
+
+                <input id="website" name="website" type="text" class="honeypot-field" tabindex="-1" autocomplete="off" />
+
+                <div class="submit-consent-grid">
+                  <label class="checkbox-row">
+                    <input id="rights-confirmed" name="rights_confirmed" type="checkbox" required />
+                    <span>
+                      I confirm that I have lawful access to this PDF and may submit it for restricted OCR
+                      processing and review support.
+                    </span>
+                  </label>
+
+                  <label class="checkbox-row">
+                    <input id="display-contributor" name="display_contributor" type="checkbox" />
+                    <span>
+                      If this submission is used, you may display my contributor name on the public explorer.
+                    </span>
+                  </label>
+                </div>
+
+                <div id="turnstile-shell" class="turnstile-shell" hidden>
+                  <p class="turnstile-label">Human verification</p>
+                  <div id="turnstile-widget"></div>
+                </div>
+
+                <div class="submit-actions">
+                  <button id="submit-button" class="button button-primary" type="submit">
+                    Submit PDF to restricted OCR intake
+                  </button>
+                  <a class="button button-secondary" href="./index.html#contributors">
+                    View contributor directory
+                  </a>
+                </div>
+
+                <div id="submission-status" class="submit-status" role="status" aria-live="polite"></div>
+              </form>
+            </section>
+
+            <aside class="submit-side">
+              <article class="governance-card">
+                <h3>What happens after upload</h3>
+                <p>
+                  The restricted backend stores the PDF privately, creates a job record,
+                  generates a searchable PDF, and extracts canonical OCR text. Public
+                  release, if any, is handled separately and conservatively.
+                </p>
+              </article>
+              <article class="governance-card">
+                <h3>What this page does not do</h3>
+                <p>
+                  It does not publish your uploaded file, promise immediate human review,
+                  or expose copyrighted full text through the public explorer.
+                </p>
+              </article>
+              <article class="governance-card">
+                <h3>Contributor credit</h3>
+                <p>
+                  Names are shown publicly only if you opt in. If you provide a homepage,
+                  lab page, or ORCID URL, the directory can link your name out from the
+                  top section of the explorer.
+                </p>
+              </article>
+            </aside>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>
+          Submission intake is separated from the public metadata explorer. Public release
+          and restricted full-text handling are intentionally decoupled.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="./submit.js"></script>
+  </body>
+</html>
