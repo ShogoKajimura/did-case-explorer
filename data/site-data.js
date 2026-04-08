@@ -17,11 +17,11 @@ export const contributorDirectory = [
 ];
 
 export const submissionPortalConfig = {
-  intakeUrl: "",
+  intakeUrl: "https://shogomac-studio.taila49884.ts.net/api/v1/public/submissions",
   turnstileSiteKey: "",
   maxUploadMb: 150,
   acceptedFileTypes: ".pdf",
-  portalStatus: "setup_required",
+  portalStatus: "funnel_live_turnstile_pending",
   contactEmail: "",
 };
 
