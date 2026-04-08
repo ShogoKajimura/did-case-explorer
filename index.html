@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DID Multilingual Case Explorer</title>
+    <meta
+      name="description"
+      content="Companion explorer for the multilingual DID case-literature review: versioned corpus overview, professional UI shell, and secure public metadata boundary."
+    />
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="DID multilingual case explorer home">
+          <span class="brand-mark">D</span>
+          <span class="brand-text">
+            <strong>DID Multilingual Case Explorer</strong>
+            <small>Companion corpus resource</small>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="#overview">Overview</a>
+          <a href="#explorer">Explorer</a>
+          <a href="#visualize">Visualize</a>
+          <a href="#governance">Governance</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero" id="overview">
+          <div class="hero-copy">
+            <p class="eyebrow">Versioned multilingual evidence map</p>
+            <h1>
+              A publication-grade shell for the DID case-literature companion
+              resource.
+            </h1>
+            <p class="hero-text">
+              This interface is designed as a high-trust public explorer for the
+              multilingual DID/MPD review corpus. Phase 1 is intentionally
+              read-only: searchable, filterable, and legally conservative. A
+              restricted OCR intake layer can be added later without exposing
+              private source files to the public web.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#explorer">Preview explorer</a>
+              <a class="button button-secondary" href="./docs/DEPLOYMENT_AND_SECURITY.md"
+                >Read deployment plan</a
+              >
+            </div>
+            <div class="hero-badges" id="hero-badges"></div>
+          </div>
+
+          <aside class="hero-panel">
+            <div class="panel-header">
+              <span>Public surface</span>
+              <strong>Phase 1 architecture boundary</strong>
+            </div>
+            <div class="boundary-grid">
+              <article class="boundary-card boundary-card-public">
+                <h2>Public by default</h2>
+                <ul>
+                  <li>Versioned bibliographic metadata</li>
+                  <li>Coded clinical variables</li>
+                  <li>Source-access status</li>
+                  <li>Figures and downloadable snapshots</li>
+                </ul>
+              </article>
+              <article class="boundary-card boundary-card-restricted">
+                <h2>Restricted by design</h2>
+                <ul>
+                  <li>Copyrighted full texts</li>
+                  <li>Private OCR return artifacts</li>
+                  <li>Contributor identities and uploads</li>
+                  <li>Future intake and review queue</li>
+                </ul>
+              </article>
+            </div>
+          </aside>
+        </section>
+
+        <section class="stats-strip" aria-label="Corpus overview metrics">
+          <div id="stat-cards" class="stats-grid"></div>
+        </section>
+
+        <section class="section section-explorer" id="explorer">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Explorer shell</p>
+              <h2>Search, filter, and inspect the corpus boundary.</h2>
+            </div>
+            <p class="section-note">
+              The interface below uses representative records for UI validation.
+              The full frozen snapshot can be wired in next without changing the
+              public architecture.
+            </p>
+          </div>
+
+          <div class="explorer-layout">
+            <aside class="filter-panel">
+              <div class="filter-group">
+                <label for="search">Search records</label>
+                <input
+                  id="search"
+                  type="search"
+                  placeholder="Title, record ID, country, language"
+                />
+              </div>
+
+              <div class="filter-group">
+                <label for="language-filter">Language group</label>
+                <select id="language-filter">
+                  <option value="all">All language groups</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="structure-filter">Case structure</label>
+                <select id="structure-filter">
+                  <option value="all">All structures</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="access-filter">Source-access status</label>
+                <select id="access-filter">
+                  <option value="all">All access states</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="signal-filter">Phenotype signal</label>
+                <select id="signal-filter">
+                  <option value="all">All signal types</option>
+                </select>
+              </div>
+
+              <button id="reset-filters" class="button button-secondary button-full">
+                Reset filters
+              </button>
+            </aside>
+
+            <div class="explorer-main">
+              <div class="explorer-toolbar">
+                <div>
+                  <p class="toolbar-kicker">Current preview</p>
+                  <h3 id="results-count">0 representative records</h3>
+                </div>
+                <div class="toolbar-meta">
+                  <span class="pill">Read-only public shell</span>
+                  <span class="pill">Static deploy target</span>
+                </div>
+              </div>
+
+              <div class="table-card">
+                <table class="record-table">
+                  <thead>
+                    <tr>
+                      <th>Record</th>
+                      <th>Language</th>
+                      <th>Structure</th>
+                      <th>Signal focus</th>
+                      <th>Access</th>
+                    </tr>
+                  </thead>
+                  <tbody id="record-table-body"></tbody>
+                </table>
+                <div id="empty-state" class="empty-state" hidden>
+                  No representative records match the current filter state.
+                </div>
+              </div>
+            </div>
+
+            <aside class="detail-panel">
+              <div class="detail-head">
+                <p class="eyebrow">Record preview</p>
+                <h3 id="detail-title">Select a record</h3>
+              </div>
+              <div id="detail-content" class="detail-content">
+                <p>
+                  The full corpus snapshot can later populate this panel with
+                  metadata, coding outputs, provenance notes, and legal access
+                  status without changing the UI contract.
+                </p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section" id="visualize">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Aggregate views</p>
+              <h2>Visualization surfaces built for manuscript-aligned variables.</h2>
+            </div>
+            <p class="section-note">
+              These cards are driven by manuscript-level counts and can be
+              replaced by frozen snapshot data exports later.
+            </p>
+          </div>
+
+          <div id="visual-cards" class="visual-grid"></div>
+        </section>
+
+        <section class="section governance" id="governance">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Governance and operations</p>
+              <h2>Designed for long-term maintenance, not a one-off demo.</h2>
+            </div>
+            <p class="section-note">
+              Phase 1 is a static public layer. Phase 2 should be a separate
+              authenticated service for restricted files and OCR intake.
+            </p>
+          </div>
+
+          <div class="governance-grid">
+            <article class="governance-card">
+              <h3>Recommended host</h3>
+              <p>
+                Cloudflare Pages is the preferred deployment target for the
+                public explorer because it serves static assets globally, honors
+                security headers, and leaves room for later Workers/R2-based
+                private workflows.
+              </p>
+            </article>
+            <article class="governance-card">
+              <h3>Security posture</h3>
+              <p>
+                Keep the public build free of contributor uploads and restricted
+                PDFs. The browser should only receive metadata, coded outputs,
+                version manifests, and links that are already legally public.
+              </p>
+            </article>
+            <article class="governance-card">
+              <h3>Maintenance model</h3>
+              <p>
+                Treat each corpus freeze as a versioned data snapshot. Publish a
+                new build only when metadata, coding, or legal-access status has
+                been audited and signed off.
+              </p>
+            </article>
+            <article class="governance-card">
+              <h3>Deferred to phase 2</h3>
+              <p>
+                Upload intake, private OCR return artifacts, contributor
+                accounts, and any restricted storage should remain outside this
+                public app until a separate authenticated backend is designed.
+              </p>
+            </article>
+          </div>
+
+          <div class="system-flow">
+            <div class="flow-column">
+              <span class="flow-label">Phase 1 public build</span>
+              <div class="flow-box">Versioned snapshot JSON / TSV</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-box">Static explorer UI</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-box">Public metadata, coded variables, legal links</div>
+            </div>
+            <div class="flow-column flow-column-restricted">
+              <span class="flow-label">Future restricted workflow</span>
+              <div class="flow-box">Authenticated contributor intake</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-box">OCR pipeline and review queue</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-box">Private storage and curator dashboard</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>
+          Companion explorer shell for the multilingual DID case-literature
+          review. Current build target: read-only public release with versioned
+          metadata boundary.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
