@@ -1,12 +1,20 @@
-import { aggregateCards, demoRecords, heroBadges, visualizations } from "./data/site-data.js";
-
-const state = {
-  query: "",
-  language: "all",
-  structure: "all",
-  access: "all",
-  signal: "all",
-  selectedId: null,
+const FALLBACK_AGGREGATES = {
+  snapshot: {
+    version: "preview-shell",
+  },
+  heroBadges: [
+    "Preview shell",
+    "Metadata boundary",
+    "Static deploy target",
+  ],
+  aggregateCards: [
+    { label: "Retained sources", value: "0", note: "Load failed" },
+    { label: "Languages", value: "0", note: "Load failed" },
+    { label: "Countries / regions", value: "0", note: "Load failed" },
+    { label: "Represented cases", value: "0", note: "Load failed" },
+    { label: "OCR-managed records", value: "0", note: "Load failed" },
+  ],
+  visualizations: [],
 };
 
 const searchInput = document.querySelector("#search");
@@ -23,9 +31,35 @@ const resultsCount = document.querySelector("#results-count");
 const detailTitle = document.querySelector("#detail-title");
 const detailContent = document.querySelector("#detail-content");
 const visualCards = document.querySelector("#visual-cards");
+const snapshotPill = document.querySelector("#snapshot-pill");
+
+const state = {
+  query: "",
+  language: "all",
+  structure: "all",
+  access: "all",
+  signal: "all",
+  selectedId: null,
+};
+
+let aggregates = FALLBACK_AGGREGATES;
+let records = [];
+
+function normalizeLabel(value) {
+  return value
+    .replaceAll("_", " ")
+    .replaceAll("/", " / ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function slugValue(value) {
+  return value.trim().toLowerCase();
+}
 
 function uniqueValues(key) {
-  return [...new Set(demoRecords.map((record) => record[key]))].sort();
+  return [...new Set(records.map((record) => record[key]).filter(Boolean))].sort();
 }
 
 function appendOptions(select, values) {
@@ -39,7 +73,7 @@ function appendOptions(select, values) {
 
 function renderHeroBadges() {
   heroBadgeContainer.innerHTML = "";
-  heroBadges.forEach((badge) => {
+  aggregates.heroBadges.forEach((badge) => {
     const span = document.createElement("span");
     span.className = "pill";
     span.textContent = badge;
@@ -49,7 +83,7 @@ function renderHeroBadges() {
 
 function renderStatCards() {
   statCards.innerHTML = "";
-  aggregateCards.forEach((card) => {
+  aggregates.aggregateCards.forEach((card) => {
     const article = document.createElement("article");
     article.innerHTML = `
       <span class="stat-label">${card.label}</span>
@@ -66,7 +100,7 @@ function buildBarRow(item, maxValue) {
   const percentage = maxValue === 0 ? 0 : (item.value / maxValue) * 100;
   row.innerHTML = `
     <div class="bar-label">
-      <span>${item.label}</span>
+      <span>${normalizeLabel(item.label)}</span>
       <strong>${item.value}</strong>
     </div>
     <div class="bar-track">
@@ -78,10 +112,10 @@ function buildBarRow(item, maxValue) {
 
 function renderVisualCards() {
   visualCards.innerHTML = "";
-  visualizations.forEach((card) => {
+  aggregates.visualizations.forEach((card) => {
     const article = document.createElement("article");
     article.className = "visual-card";
-    const maxValue = Math.max(...card.series.map((item) => item.value));
+    const maxValue = Math.max(...card.series.map((item) => item.value), 0);
     article.innerHTML = `
       <div class="visual-card-header">
         <div>
@@ -101,14 +135,22 @@ function renderVisualCards() {
 }
 
 function getFilteredRecords() {
-  return demoRecords.filter((record) => {
+  return records.filter((record) => {
     const haystack = [
       record.id,
       record.title,
+      record.authors,
+      record.journal,
       record.country,
       record.language,
-      record.signalFocus,
-      record.accessStatus,
+      record.accessLabel,
+      record.recordType,
+      record.variables.coConsciousness,
+      record.variables.amnesia,
+      record.variables.amnesiaDirectionality,
+      record.variables.voluntarySwitching,
+      record.variables.treatmentGoal,
+      record.variables.outcome,
     ]
       .join(" ")
       .toLowerCase();
@@ -117,11 +159,18 @@ function getFilteredRecords() {
     const matchesLanguage =
       state.language === "all" || record.languageGroup === state.language;
     const matchesStructure =
-      state.structure === "all" || record.caseStructure === state.structure;
+      state.structure === "all" || record.recordType === state.structure;
     const matchesAccess =
-      state.access === "all" || record.accessStatus === state.access;
+      state.access === "all" || record.accessLabel === state.access;
     const matchesSignal =
-      state.signal === "all" || record.signalFocus === state.signal;
+      state.signal === "all" ||
+      [
+        record.variables.coConsciousness,
+        record.variables.amnesiaDirectionality,
+        record.variables.voluntarySwitching,
+        record.variables.treatmentGoal,
+        record.variables.outcome,
+      ].includes(state.signal);
 
     return (
       matchesQuery &&
@@ -138,48 +187,60 @@ function renderDetail(record) {
     detailTitle.textContent = "Select a record";
     detailContent.innerHTML = `
       <p>
-        The full corpus snapshot can later populate this panel with metadata,
-        coding outputs, provenance notes, and legal access status without changing
-        the UI contract.
+        Select a record to inspect its public metadata, coded-variable profile,
+        and access status.
       </p>
     `;
     return;
   }
 
+  const linkHtml = record.publicLinkUrl
+    ? `<a class="button button-secondary" href="${record.publicLinkUrl}" target="_blank" rel="noreferrer">Open external record page</a>`
+    : `<span class="pill">No public external link recorded</span>`;
+
   detailTitle.textContent = `${record.id} · ${record.title}`;
   detailContent.innerHTML = `
     <div class="detail-block">
       <div class="detail-grid">
+        <div><span>Authors</span><strong>${record.authors || "Not stated"}</strong></div>
+        <div><span>Year</span><strong>${record.year || "Not stated"}</strong></div>
+        <div><span>Journal</span><strong>${record.journal || "Not stated"}</strong></div>
         <div><span>Country</span><strong>${record.country}</strong></div>
         <div><span>Language</span><strong>${record.language}</strong></div>
-        <div><span>Case structure</span><strong>${record.caseStructure}</strong></div>
-        <div><span>Access status</span><strong>${record.accessStatus}</strong></div>
-        <div><span>Signal focus</span><strong>${record.signalFocus}</strong></div>
-        <div><span>Preview role</span><strong>${record.previewRole}</strong></div>
+        <div><span>Case structure</span><strong>${record.recordType}</strong></div>
+        <div><span>Case shape</span><strong>${record.caseShape}</strong></div>
+        <div><span>Case count</span><strong>${record.caseCount || "Not stated"}</strong></div>
+        <div><span>Access status</span><strong>${record.accessLabel}</strong></div>
+        <div><span>DOI</span><strong>${record.doi || "Not stated"}</strong></div>
       </div>
     </div>
     <div class="detail-block">
-      <h4>Clinical summary</h4>
-      <p>${record.summary}</p>
+      <h4>Coded variable profile</h4>
+      <div class="detail-grid">
+        <div><span>Co-consciousness</span><strong>${normalizeLabel(record.variables.coConsciousness)}</strong></div>
+        <div><span>Amnesia</span><strong>${normalizeLabel(record.variables.amnesia)}</strong></div>
+        <div><span>Amnesia directionality</span><strong>${normalizeLabel(record.variables.amnesiaDirectionality)}</strong></div>
+        <div><span>Voluntary switching</span><strong>${normalizeLabel(record.variables.voluntarySwitching)}</strong></div>
+        <div><span>Treatment goal</span><strong>${normalizeLabel(record.variables.treatmentGoal)}</strong></div>
+        <div><span>Outcome</span><strong>${normalizeLabel(record.variables.outcome)}</strong></div>
+        <div><span>Diagnostic delay (years)</span><strong>${record.variables.diagnosticDelayYears || "Not stated"}</strong></div>
+        <div><span>Psychosis differential</span><strong>${normalizeLabel(record.variables.psychosisPriorOrDifferential)}</strong></div>
+      </div>
     </div>
     <div class="detail-block">
-      <h4>Why this record is in the interface preview</h4>
-      <p>${record.interfaceReason}</p>
-    </div>
-    <div class="detail-block">
-      <h4>Future real-data slot</h4>
+      <h4>Access and reuse note</h4>
       <p>
-        This panel is designed to receive frozen-snapshot fields such as coded
-        variable provenance, access notes, open-link status, OCR dependence, and
-        manuscript-aligned figure memberships.
+        This public companion resource exposes metadata and coded variables. It does
+        not redistribute copyrighted full text unless clearly permissible.
       </p>
+      ${linkHtml}
     </div>
   `;
 }
 
 function renderTable() {
   const filtered = getFilteredRecords();
-  resultsCount.textContent = `${filtered.length} representative record${filtered.length === 1 ? "" : "s"}`;
+  resultsCount.textContent = `${filtered.length} record${filtered.length === 1 ? "" : "s"} in the frozen public snapshot`;
   recordTableBody.innerHTML = "";
   emptyState.hidden = filtered.length !== 0;
 
@@ -207,9 +268,9 @@ function renderTable() {
         <div>${record.language}</div>
         <small>${record.country}</small>
       </td>
-      <td>${record.caseStructure}</td>
-      <td><span class="tag">${record.signalFocus}</span></td>
-      <td><span class="tag">${record.accessStatus}</span></td>
+      <td>${record.recordType}</td>
+      <td><span class="tag">${normalizeLabel(record.variables.coConsciousness)}</span></td>
+      <td><span class="tag">${record.accessLabel}</span></td>
     `;
     row.addEventListener("click", () => {
       state.selectedId = record.id;
@@ -253,23 +314,77 @@ function resetFilters() {
   renderTable();
 }
 
-function init() {
+async function loadJson(path) {
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(`Failed to load ${path}: ${response.status}`);
+  }
+  return response.json();
+}
+
+function populateFilters() {
   appendOptions(languageFilter, uniqueValues("languageGroup"));
-  appendOptions(structureFilter, uniqueValues("caseStructure"));
-  appendOptions(accessFilter, uniqueValues("accessStatus"));
-  appendOptions(signalFilter, uniqueValues("signalFocus"));
+  appendOptions(structureFilter, uniqueValues("recordType"));
+  appendOptions(accessFilter, uniqueValues("accessLabel"));
+
+  const signalOptions = new Set();
+  for (const record of records) {
+    for (const value of [
+      record.variables.coConsciousness,
+      record.variables.amnesiaDirectionality,
+      record.variables.voluntarySwitching,
+      record.variables.treatmentGoal,
+      record.variables.outcome,
+    ]) {
+      if (value && value !== "not_stated") {
+        signalOptions.add(value);
+      }
+    }
+  }
+  appendOptions(signalFilter, [...signalOptions].sort().map(normalizeLabel));
+
+  const signalMap = new Map(
+    [...signalOptions].sort().map((value) => [normalizeLabel(value), value]),
+  );
+
+  signalFilter.addEventListener("change", () => {
+    state.signal = signalFilter.value === "all" ? "all" : signalMap.get(signalFilter.value);
+    renderTable();
+  });
+}
+
+async function init() {
+  try {
+    [aggregates, records] = await Promise.all([
+      loadJson("./data/public-aggregates-2026-03-27.json"),
+      loadJson("./data/public-records-2026-03-27.json"),
+    ]);
+  } catch (error) {
+    console.error(error);
+    detailTitle.textContent = "Snapshot load failed";
+    detailContent.innerHTML = `
+      <p>
+        The public snapshot files could not be loaded. Check that the JSON
+        exports exist in <code>data/</code> and were deployed to GitHub Pages.
+      </p>
+    `;
+  }
 
   renderHeroBadges();
   renderStatCards();
   renderVisualCards();
+  snapshotPill.textContent = `Version ${aggregates.snapshot.version}`;
+
+  if (records.length > 0) {
+    populateFilters();
+  }
+
   renderTable();
 
-  [searchInput, languageFilter, structureFilter, accessFilter, signalFilter].forEach(
-    (element) => {
-      element.addEventListener("input", syncStateFromInputs);
-      element.addEventListener("change", syncStateFromInputs);
-    },
-  );
+  [searchInput, languageFilter, structureFilter, accessFilter].forEach((element) => {
+    element.addEventListener("input", syncStateFromInputs);
+    element.addEventListener("change", syncStateFromInputs);
+  });
 
   resetButton.addEventListener("click", resetFilters);
 }

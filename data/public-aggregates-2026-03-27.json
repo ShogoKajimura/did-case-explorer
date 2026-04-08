@@ -1,0 +1,167 @@
+{
+  "snapshot": {
+    "version": "2026-03-27",
+    "freezeDate": "2026-03-27",
+    "sourceCount": 219,
+    "languageCount": 20,
+    "countryCount": 42,
+    "representedCaseCount": 1069,
+    "ocrManagedCount": 20
+  },
+  "heroBadges": [
+    "Corpus freeze · 2026-03-27",
+    "219 retained sources",
+    "20 languages",
+    "42 countries or regions",
+    "Public metadata boundary"
+  ],
+  "aggregateCards": [
+    {
+      "label": "Retained sources",
+      "value": "219",
+      "note": "Frozen manuscript snapshot"
+    },
+    {
+      "label": "Languages",
+      "value": "20",
+      "note": "Multilingual corpus scope"
+    },
+    {
+      "label": "Countries / regions",
+      "value": "42",
+      "note": "Cross-cultural case geography"
+    },
+    {
+      "label": "Represented cases",
+      "value": "1,069",
+      "note": "Case literature denominator"
+    },
+    {
+      "label": "OCR-managed records",
+      "value": "20",
+      "note": "Local OCR but no public full text"
+    }
+  ],
+  "visualizations": [
+    {
+      "kicker": "Clinical variable",
+      "title": "Co-consciousness distribution",
+      "description": "Counts across the frozen public metadata snapshot.",
+      "denominator": "n = 219",
+      "series": [
+        {
+          "label": "yes",
+          "value": 34
+        },
+        {
+          "label": "partial",
+          "value": 47
+        },
+        {
+          "label": "mixed_or_variable",
+          "value": 10
+        },
+        {
+          "label": "uncertain",
+          "value": 3
+        },
+        {
+          "label": "no",
+          "value": 5
+        },
+        {
+          "label": "not_stated",
+          "value": 120
+        }
+      ]
+    },
+    {
+      "kicker": "Clinical variable",
+      "title": "Inter-identity amnesia prevalence",
+      "description": "Public-safe aggregate counts aligned with the review manuscript.",
+      "denominator": "n = 219",
+      "series": [
+        {
+          "label": "yes",
+          "value": 165
+        },
+        {
+          "label": "uncertain_or_partial",
+          "value": 12
+        },
+        {
+          "label": "no",
+          "value": 6
+        },
+        {
+          "label": "not_stated",
+          "value": 36
+        }
+      ]
+    },
+    {
+      "kicker": "Clinical variable",
+      "title": "Voluntary switching profile",
+      "description": "Distribution across the full coded source frame.",
+      "denominator": "n = 219",
+      "series": [
+        {
+          "label": "yes",
+          "value": 6
+        },
+        {
+          "label": "partial",
+          "value": 13
+        },
+        {
+          "label": "mixed_or_variable",
+          "value": 1
+        },
+        {
+          "label": "no",
+          "value": 35
+        },
+        {
+          "label": "not_stated",
+          "value": 164
+        }
+      ]
+    },
+    {
+      "kicker": "Treatment frame",
+      "title": "Treatment goal distribution",
+      "description": "Treatment goals charted from the public coded variable layer.",
+      "denominator": "n = 219",
+      "series": [
+        {
+          "label": "other_described",
+          "value": 69
+        },
+        {
+          "label": "integration_or_fusion",
+          "value": 46
+        },
+        {
+          "label": "not_stated",
+          "value": 41
+        },
+        {
+          "label": "safety_or_stabilization",
+          "value": 36
+        },
+        {
+          "label": "trauma_processing",
+          "value": 12
+        },
+        {
+          "label": "functioning_or_cooperation",
+          "value": 10
+        },
+        {
+          "label": "diagnostic_clarification",
+          "value": 5
+        }
+      ]
+    }
+  ]
+}

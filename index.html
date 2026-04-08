@@ -46,6 +46,12 @@
             </p>
             <div class="hero-actions">
               <a class="button button-primary" href="#explorer">Preview explorer</a>
+              <a class="button button-secondary" href="./data/public-snapshot-2026-03-27.tsv"
+                >Download snapshot TSV</a
+              >
+              <a class="button button-secondary" href="./docs/PUBLIC_CODEBOOK_2026-03-27.md"
+                >Open public codebook</a
+              >
               <a class="button button-secondary" href="./docs/DEPLOYMENT_AND_SECURITY.md"
                 >Read deployment plan</a
               >
@@ -92,9 +98,9 @@
               <h2>Search, filter, and inspect the corpus boundary.</h2>
             </div>
             <p class="section-note">
-              The interface below uses representative records for UI validation.
-              The full frozen snapshot can be wired in next without changing the
-              public architecture.
+              The interface below is driven by a frozen public-safe export of
+              manuscript-aligned metadata and coded variables. Copyrighted full
+              texts and local OCR artifacts are not exposed here.
             </p>
           </div>
 
@@ -146,11 +152,11 @@
               <div class="explorer-toolbar">
                 <div>
                   <p class="toolbar-kicker">Current preview</p>
-                  <h3 id="results-count">0 representative records</h3>
+                  <h3 id="results-count">Loading records…</h3>
                 </div>
                 <div class="toolbar-meta">
-                  <span class="pill">Read-only public shell</span>
-                  <span class="pill">Static deploy target</span>
+                  <span class="pill">Frozen public snapshot</span>
+                  <span class="pill" id="snapshot-pill">Version pending</span>
                 </div>
               </div>
 
@@ -168,7 +174,7 @@
                   <tbody id="record-table-body"></tbody>
                 </table>
                 <div id="empty-state" class="empty-state" hidden>
-                  No representative records match the current filter state.
+                  No records match the current filter state.
                 </div>
               </div>
             </div>
@@ -180,9 +186,8 @@
               </div>
               <div id="detail-content" class="detail-content">
                 <p>
-                  The full corpus snapshot can later populate this panel with
-                  metadata, coding outputs, provenance notes, and legal access
-                  status without changing the UI contract.
+                  Select a record to inspect its public metadata, coded-variable
+                  profile, and access status.
                 </p>
               </div>
             </aside>
