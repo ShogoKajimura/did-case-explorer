@@ -1153,26 +1153,6 @@ h3 {
   gap: 10px;
 }
 
-.footer-hotspot {
-  width: 14px;
-  height: 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(23, 34, 38, 0.16);
-  background: rgba(23, 34, 38, 0.08);
-  opacity: 0.18;
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease,
-    background 160ms ease;
-}
-
-.footer-hotspot:hover,
-.footer-hotspot:focus-visible {
-  opacity: 0.62;
-  transform: translateY(-1px);
-  background: rgba(159, 62, 47, 0.18);
-}
-
 .admin-layout {
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr);

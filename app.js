@@ -19,6 +19,13 @@ const FALLBACK_AGGREGATES = {
   visualizations: [],
 };
 
+const EMPTY_POST_FREEZE_SUMMARY = {
+  approvedCount: 0,
+  contributorCount: 0,
+  cohorts: [],
+  generatedAt: null,
+};
+
 const searchInput = document.querySelector("#search");
 const languageFilter = document.querySelector("#language-filter");
 const structureFilter = document.querySelector("#structure-filter");
@@ -54,9 +61,19 @@ const state = {
 
 let aggregates = FALLBACK_AGGREGATES;
 let records = [];
+let postFreezeSummary = EMPTY_POST_FREEZE_SUMMARY;
+let postFreezeContributors = [];
+
+function dynamicHeroBadges() {
+  const approvedCount = Number(postFreezeSummary.approvedCount || 0);
+  if (approvedCount > 0) {
+    return [`Approved post-freeze updates · ${approvedCount}`];
+  }
+  return ["No approved post-freeze public updates yet"];
+}
 
 function normalizeLabel(value) {
-  return value
+  return String(value ?? "")
     .replaceAll("_", " ")
     .replaceAll("/", " / ")
     .replace(/\s+/g, " ")
@@ -83,7 +100,7 @@ function appendOptions(select, values) {
 
 function renderHeroBadges() {
   heroBadgeContainer.innerHTML = "";
-  aggregates.heroBadges.forEach((badge) => {
+  [...aggregates.heroBadges, ...dynamicHeroBadges()].forEach((badge) => {
     const span = document.createElement("span");
     span.className = "pill";
     span.textContent = badge;
@@ -93,7 +110,19 @@ function renderHeroBadges() {
 
 function renderStatCards() {
   statCards.innerHTML = "";
-  aggregates.aggregateCards.forEach((card) => {
+  const cards = [
+    ...aggregates.aggregateCards,
+    {
+      label: "Approved post-freeze updates",
+      value: String(postFreezeSummary.approvedCount || 0),
+      note:
+        Number(postFreezeSummary.approvedCount || 0) > 0
+          ? "Curator-approved additions published after the manuscript freeze"
+          : "No curator-approved public additions yet",
+    },
+  ];
+
+  cards.forEach((card) => {
     const article = document.createElement("article");
     article.innerHTML = `
       <span class="stat-label">${card.label}</span>
@@ -151,7 +180,17 @@ function renderContributors() {
 
   contributorCards.innerHTML = "";
 
-  if (!contributorDirectory.length) {
+  const mergedContributors = [...contributorDirectory];
+  postFreezeContributors.forEach((entry) => {
+    const exists = mergedContributors.some(
+      (candidate) => candidate.name === entry.name && (candidate.url || "") === (entry.url || ""),
+    );
+    if (!exists) {
+      mergedContributors.push(entry);
+    }
+  });
+
+  if (!mergedContributors.length) {
     contributorCards.innerHTML = `
       <article class="contributor-card contributor-card-empty">
         <h3>Contributor directory will appear here</h3>
@@ -164,7 +203,7 @@ function renderContributors() {
     return;
   }
 
-  contributorDirectory.forEach((entry) => {
+  mergedContributors.forEach((entry) => {
     const article = document.createElement("article");
     article.className = "contributor-card";
     const heading = entry.url
@@ -199,6 +238,8 @@ function getFilteredRecords() {
       record.variables.voluntarySwitching,
       record.variables.treatmentGoal,
       record.variables.outcome,
+      record.releaseTrackLabel,
+      record.releaseCohort,
     ]
       .join(" ")
       .toLowerCase();
@@ -276,6 +317,8 @@ function renderDetail(record) {
         <div><span>Case count</span><strong>${record.caseCount || "Not stated"}</strong></div>
         <div><span>Access status</span><strong>${record.accessLabel}</strong></div>
         <div><span>DOI</span><strong>${record.doi || "Not stated"}</strong></div>
+        <div><span>Release track</span><strong>${record.releaseTrackLabel || "Not stated"}</strong></div>
+        <div><span>Release cohort</span><strong>${record.releaseCohort || "Not stated"}</strong></div>
       </div>
     </div>
     <div class="detail-block">
@@ -297,6 +340,11 @@ function renderDetail(record) {
         This public companion resource exposes metadata and coded variables. It does
         not redistribute copyrighted full text unless clearly permissible.
       </p>
+      <p>
+        ${record.releaseTrack === "post_freeze_update"
+          ? "This record was added after the manuscript freeze through the restricted OCR workflow and a later curator-approved public update."
+          : "This record belongs to the frozen manuscript-aligned public snapshot."}
+      </p>
       ${linkHtml}
     </div>
   `;
@@ -310,7 +358,11 @@ function renderTable() {
   const firstIndex = filtered.length === 0 ? 0 : state.pageSize === "all" ? 1 : (state.page - 1) * Number(state.pageSize) + 1;
   const lastIndex = filtered.length === 0 ? 0 : state.pageSize === "all" ? filtered.length : Math.min(filtered.length, firstIndex + visible.length - 1);
 
-  resultsCount.textContent = `${filtered.length} record${filtered.length === 1 ? "" : "s"} in the frozen public snapshot`;
+  const approvedCount = Number(postFreezeSummary.approvedCount || 0);
+  resultsCount.textContent =
+    approvedCount > 0
+      ? `${filtered.length} record${filtered.length === 1 ? "" : "s"} across the freeze snapshot and approved post-freeze updates`
+      : `${filtered.length} record${filtered.length === 1 ? "" : "s"} in the frozen public snapshot`;
   pageSummary.textContent = `Showing ${firstIndex}\u2013${lastIndex}`;
   pageIndicator.textContent = `Page ${state.page} / ${totalPages}`;
   prevPageButton.disabled = state.page <= 1;
@@ -335,7 +387,7 @@ function renderTable() {
       <td>
         <div class="record-title">
           <strong>${record.id}</strong>
-          <small>${record.title}</small>
+          <small>${record.title}${record.releaseTrack === "post_freeze_update" ? " · Post-freeze update" : ""}</small>
         </div>
       </td>
       <td>
@@ -399,6 +451,19 @@ async function loadJson(path) {
   return response.json();
 }
 
+async function loadOptionalJson(path, fallbackValue) {
+  try {
+    const response = await fetch(path, { cache: "no-store" });
+    if (!response.ok) {
+      return fallbackValue;
+    }
+    return response.json();
+  } catch (error) {
+    console.warn(`Optional dataset could not be loaded: ${path}`, error);
+    return fallbackValue;
+  }
+}
+
 function populateFilters() {
   appendOptions(languageFilter, uniqueValues("languageGroup"));
   appendOptions(structureFilter, uniqueValues("recordType"));
@@ -433,10 +498,36 @@ function populateFilters() {
 
 async function init() {
   try {
-    [aggregates, records] = await Promise.all([
+    const [
+      loadedAggregates,
+      loadedFreezeRecords,
+      loadedPostFreezeSummary,
+      loadedPostFreezeRecords,
+      loadedPostFreezeContributors,
+    ] = await Promise.all([
       loadJson("./data/public-aggregates-2026-03-27.json"),
       loadJson("./data/public-records-2026-03-27.json"),
+      loadOptionalJson("./data/post-freeze-public-summary.json", EMPTY_POST_FREEZE_SUMMARY),
+      loadOptionalJson("./data/post-freeze-public-records.json", []),
+      loadOptionalJson("./data/post-freeze-public-contributors.json", []),
     ]);
+    aggregates = loadedAggregates;
+    postFreezeSummary = loadedPostFreezeSummary;
+    postFreezeContributors = loadedPostFreezeContributors;
+
+    const frozenRecords = loadedFreezeRecords.map((record) => ({
+      ...record,
+      releaseTrack: "manuscript_freeze",
+      releaseTrackLabel: "Manuscript freeze",
+      releaseCohort: loadedAggregates.snapshot.version,
+    }));
+    const postFreezeRecords = loadedPostFreezeRecords.map((record) => ({
+      ...record,
+      releaseTrack: record.releaseTrack || "post_freeze_update",
+      releaseTrackLabel: record.releaseTrackLabel || "Post-freeze public update",
+      releaseCohort: record.releaseCohort || "Post-freeze public update",
+    }));
+    records = [...postFreezeRecords, ...frozenRecords];
   } catch (error) {
     console.error(error);
     detailTitle.textContent = "Snapshot load failed";
@@ -452,7 +543,10 @@ async function init() {
   renderStatCards();
   renderVisualCards();
   renderContributors();
-  snapshotPill.textContent = `Version ${aggregates.snapshot.version}`;
+  snapshotPill.textContent =
+    Number(postFreezeSummary.approvedCount || 0) > 0
+      ? `Freeze ${aggregates.snapshot.version} · +${postFreezeSummary.approvedCount} approved updates`
+      : `Version ${aggregates.snapshot.version}`;
 
   if (records.length > 0) {
     populateFilters();

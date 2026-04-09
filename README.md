@@ -39,6 +39,9 @@ The public explorer should be understood as two coordinated layers:
 The snapshot and the contribution workflow should not be conflated. New uploads
 are post-freeze additions until they are audited into a later public release.
 
+Curator-approved additions can later be published through the documented release
+workflow in `docs/CURATOR_RELEASE_WORKFLOW.md`.
+
 ## Why the public explorer remains static
 
 Benefits:
@@ -65,9 +68,11 @@ Then open `http://localhost:8080`.
 - `styles.css`: visual system and responsive layout
 - `app.js`: client-side rendering and filtering
 - `data/site-data.js`: current snapshot metadata, aggregates, and UI config
+- `data/post-freeze-public-*.json`: curator-approved public additions after the manuscript freeze
 - `_headers`: recommended security headers for static hosting
 - `docs/DEPLOYMENT_AND_SECURITY.md`: deployment and operations guidance
 - `docs/DATA_CONTRACT.md`: future data-loading boundary
+- `docs/CURATOR_RELEASE_WORKFLOW.md`: curator steps for publishing approved post-freeze updates
 
 ## Recommended deployment target
 
