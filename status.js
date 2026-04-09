@@ -23,6 +23,8 @@ const recentJobsShell = document.querySelector("#recent-jobs");
 const metadataPanel = document.querySelector("#metadata-panel");
 const metadataForm = document.querySelector("#metadata-form");
 const saveMetadataButton = document.querySelector("#save-metadata-button");
+const downloadPanel = document.querySelector("#download-panel");
+const downloadNote = document.querySelector("#download-note");
 
 let pollTimerId = null;
 let currentJob = null;
@@ -176,6 +178,7 @@ function renderRecentJobs() {
 function renderResult(payload) {
   resultSection.hidden = false;
   metadataPanel.hidden = false;
+  downloadPanel.hidden = false;
   headline.textContent = payload.message;
   pill.textContent = payload.status;
   pill.dataset.state = payload.status;
@@ -183,10 +186,15 @@ function renderResult(payload) {
   createdAt.textContent = formatTimestamp(payload.createdAt);
   updatedAt.textContent = formatTimestamp(payload.updatedAt);
   workerState.textContent = payload.status;
-  detailBox.textContent = payload.error || payload.message;
+  detailBox.textContent = payload.error || payload.screeningMessage || payload.message;
+  detailBox.dataset.tone = payload.status === "failed" ? "error" : payload.screeningStatus === "needs_information" ? "warning" : "neutral";
 
-  downloadSearchablePdfButton.disabled = !payload.searchablePdfReady;
-  downloadCanonicalTextButton.disabled = !payload.canonicalTextReady;
+  downloadSearchablePdfButton.disabled = !payload.searchablePdfReady || !payload.downloadsAllowed;
+  downloadCanonicalTextButton.disabled = !payload.canonicalTextReady || !payload.downloadsAllowed;
+  downloadNote.textContent = payload.downloadsAllowed
+    ? "Artifacts are available when the buttons below are enabled."
+    : payload.screeningMessage || "Downloads are temporarily held on the restricted backend.";
+  downloadNote.dataset.tone = payload.downloadsAllowed ? "neutral" : "warning";
 }
 
 function metadataEndpoint(jobId) {
@@ -238,6 +246,9 @@ async function saveMetadata(options = {}) {
     throw new Error(payload.detail || `Metadata save failed with status ${response.status}.`);
   }
   fillMetadataForm(payload);
+  const refreshedStatus = await fetchStatus(currentJob.jobId, currentJob.accessToken);
+  currentJob.status = refreshedStatus.status;
+  renderResult(refreshedStatus);
   if (!quiet) {
     setMessage("Optional details were saved to the restricted job record.", "success");
   }
@@ -297,6 +308,8 @@ async function loadStatus() {
     console.error(error);
     setMessage(error.message || "Status lookup failed.", "error");
     resultSection.hidden = true;
+    metadataPanel.hidden = true;
+    downloadPanel.hidden = true;
   }
 }
 

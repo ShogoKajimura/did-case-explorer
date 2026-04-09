@@ -86,7 +86,7 @@
                 </p>
               </div>
 
-              <div id="status-config-note" class="submit-banner" role="status"></div>
+              <div id="status-config-note" class="info-note" role="status"></div>
 
               <form id="status-form" class="submission-form" novalidate>
                 <div class="form-grid">
@@ -111,7 +111,7 @@
                 </div>
               </form>
 
-              <div id="status-message" class="submit-status" role="status" aria-live="polite">
+              <div id="status-message" class="info-note status-note" role="status" aria-live="polite">
                 Enter the job ID and access token, or open the private status link that was
                 generated after upload.
               </div>
@@ -146,25 +146,6 @@
 
                 <div id="status-detail" class="status-detail-box">
                   Waiting for a valid private job token.
-                </div>
-
-                <div class="status-download-grid">
-                  <button
-                    id="download-searchable-pdf"
-                    class="button button-primary"
-                    type="button"
-                    disabled
-                  >
-                    Download searchable PDF
-                  </button>
-                  <button
-                    id="download-canonical-text"
-                    class="button button-secondary"
-                    type="button"
-                    disabled
-                  >
-                    Download canonical text
-                  </button>
                 </div>
               </section>
 
@@ -246,6 +227,39 @@
                     </button>
                   </div>
                 </form>
+              </section>
+
+              <section id="download-panel" class="status-result" hidden>
+                <div class="status-card-header">
+                  <div>
+                    <p class="eyebrow">Artifact download</p>
+                    <h3>Download outputs after OCR and relevance checks finish.</h3>
+                  </div>
+                  <span class="pill">Private artifacts</span>
+                </div>
+
+                <div id="download-note" class="status-detail-box">
+                  Downloads will appear here when the restricted backend marks the job as ready.
+                </div>
+
+                <div class="status-download-grid">
+                  <button
+                    id="download-searchable-pdf"
+                    class="button button-primary"
+                    type="button"
+                    disabled
+                  >
+                    Download searchable PDF
+                  </button>
+                  <button
+                    id="download-canonical-text"
+                    class="button button-secondary"
+                    type="button"
+                    disabled
+                  >
+                    Download canonical text
+                  </button>
+                </div>
               </section>
             </section>
 
