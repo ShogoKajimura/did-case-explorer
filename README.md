@@ -5,7 +5,8 @@ case-literature companion resource.
 
 ## Current scope
 
-This build is intentionally public and read-only at the metadata layer.
+This build is intentionally public and read-only at the metadata layer for the
+released corpus snapshot.
 
 It is designed to expose:
 
@@ -15,25 +16,36 @@ It is designed to expose:
 - source-access status
 - manuscript-aligned visualization surfaces
 
-It is explicitly **not** the place to store or serve:
+The public explorer surface is explicitly **not** the place to store or serve:
 
 - contributor uploads
 - restricted PDFs
 - OCR return artifacts for private documents
 - any authenticated or restricted workflow UI
 
-Restricted intake and private OCR handling live outside this public build.
+At the same time, the site now includes public submit/status pages that point
+to a separate restricted backend. The browser can initiate a contribution
+workflow, but restricted files, OCR artifacts, and queue state remain outside
+the public static snapshot.
 
-## Why this implementation is static
+## Current release model
 
-The safest and most maintainable public architecture is a static frontend with
-no public backend.
+The public explorer should be understood as two coordinated layers:
+
+- a versioned manuscript-freeze snapshot exposed through static files
+- a live post-freeze contribution workflow exposed through submit/status pages
+  but backed by separate restricted services
+
+The snapshot and the contribution workflow should not be conflated. New uploads
+are post-freeze additions until they are audited into a later public release.
+
+## Why the public explorer remains static
 
 Benefits:
 
 - minimal attack surface
 - cheap and stable hosting
-- straightforward versioning by corpus freeze
+- straightforward versioning by manuscript freeze
 - easy deployment to Cloudflare Pages, Netlify, or GitHub Pages
 - clean separation between public metadata and restricted source files
 
@@ -52,7 +64,7 @@ Then open `http://localhost:8080`.
 - `index.html`: public explorer shell
 - `styles.css`: visual system and responsive layout
 - `app.js`: client-side rendering and filtering
-- `data/site-data.js`: current preview data and manuscript-aligned aggregates
+- `data/site-data.js`: current snapshot metadata, aggregates, and UI config
 - `_headers`: recommended security headers for static hosting
 - `docs/DEPLOYMENT_AND_SECURITY.md`: deployment and operations guidance
 - `docs/DATA_CONTRACT.md`: future data-loading boundary

@@ -2,10 +2,10 @@
 
 ## Goal
 
-This app is designed so the UI can remain stable while the real corpus data is
-connected later.
+This app is designed so the UI can remain stable while the public snapshot and
+restricted post-freeze workflow evolve independently.
 
-## Public data objects expected later
+## Public data objects
 
 ### 1. Site metadata
 
@@ -18,6 +18,8 @@ High-level snapshot information:
 - country count
 - represented case count
 - OCR-dependent source count
+- update label distinguishing manuscript-freeze records from later audited
+  additions
 
 ### 2. Aggregate distributions
 
@@ -34,7 +36,7 @@ Chart-ready counts for manuscript-aligned variables:
 
 ### 3. Public record rows
 
-Each record should expose only public-safe fields such as:
+Each public record should expose only public-safe fields such as:
 
 - record ID
 - title
@@ -47,6 +49,7 @@ Each record should expose only public-safe fields such as:
 - access status
 - public link if legally permissible
 - snapshot version
+- release cohort such as `manuscript_freeze` or `post_freeze_update`
 
 ## Fields that should not be exposed publicly by default
 
@@ -71,7 +74,10 @@ The UI can map these values to friendlier labels later.
 
 ## Release discipline
 
-The public explorer should always load from a versioned frozen export.
+The public explorer should always load from a versioned frozen export. The
+restricted contribution workflow may continue to accept submissions in between
+freezes, but those submissions should not silently appear in the public dataset
+until they are audited into a later release.
 
 Good pattern:
 
@@ -82,4 +88,4 @@ Good pattern:
 This preserves the distinction between:
 
 - the public reproducible snapshot
-- the internal working corpus
+- the internal working corpus and live contribution queue

@@ -42,10 +42,10 @@
             </h1>
             <p class="hero-text">
               This interface is designed as a high-trust public explorer for the
-              multilingual DID/MPD review corpus. The explorer remains legally
-              conservative on the public web, while a separate restricted OCR
-              intake and private status workflow are already active for
-              contributor uploads.
+              multilingual DID/MPD review corpus. The public-facing records and
+              figures correspond to a frozen manuscript-aligned snapshot, while
+              submit and status pages already connect to a live restricted OCR
+              contribution workflow for post-freeze additions.
             </p>
             <div class="hero-actions">
               <a class="button button-primary" href="#explorer">Preview explorer</a>
@@ -120,8 +120,10 @@
             </div>
             <p class="section-note">
               The interface below is driven by a frozen public-safe export of
-              manuscript-aligned metadata and coded variables. Copyrighted full
-              texts and restricted OCR artifacts are not exposed here.
+              manuscript-aligned metadata and coded variables. New contributor
+              uploads enter a restricted post-freeze workflow first and appear
+              here only after legal and metadata review. Copyrighted full texts
+              and private OCR return artifacts are not exposed in the explorer.
             </p>
           </div>
 
@@ -282,38 +284,38 @@
             <article class="governance-card">
               <h3>Maintenance model</h3>
               <p>
-                Treat each corpus freeze as a versioned data snapshot. Publish a
-                new build only when metadata, coding, or legal-access status has
-                been audited and signed off.
+                Treat each manuscript freeze as a versioned public snapshot.
+                Publish a new build only when metadata, coding, or legal-access
+                status has been audited and signed off into a later release.
               </p>
             </article>
             <article class="governance-card">
-              <h3>Post-freeze intake</h3>
+              <h3>Live post-freeze intake</h3>
               <p>
-                Restricted OCR intake, private return artifacts, and queue
-                handling are already live outside the public explorer. New
-                uploads should be treated as post-freeze additions until their
-                metadata and legal status are audited into a later corpus build.
+                Restricted OCR intake, private status links, OCR return
+                artifacts, and queue handling are already live. New uploads are
+                treated as post-freeze additions until their metadata and legal
+                status are audited into a later public corpus build.
               </p>
             </article>
           </div>
 
           <div class="system-flow">
             <div class="flow-column">
-              <span class="flow-label">Manuscript freeze snapshot</span>
-              <div class="flow-box">Versioned manuscript-aligned JSON / TSV</div>
+              <span class="flow-label">Current manuscript freeze</span>
+              <div class="flow-box">2026-03-27 versioned JSON / TSV snapshot</div>
               <div class="flow-arrow"></div>
               <div class="flow-box">Static explorer UI</div>
               <div class="flow-arrow"></div>
               <div class="flow-box">Public metadata, coded variables, legal links</div>
             </div>
             <div class="flow-column flow-column-restricted">
-              <span class="flow-label">Post-freeze restricted workflow</span>
+              <span class="flow-label">Live post-freeze contribution workflow</span>
               <div class="flow-box">Contributor intake and private status links</div>
               <div class="flow-arrow"></div>
               <div class="flow-box">OCR pipeline and review queue</div>
               <div class="flow-arrow"></div>
-              <div class="flow-box">Private storage, triage, and future corpus updates</div>
+              <div class="flow-box">Private storage, triage, and later public updates</div>
             </div>
           </div>
         </section>
@@ -322,9 +324,9 @@
       <footer class="footer">
         <p>
           Companion explorer shell for the multilingual DID case-literature
-          review. Current build target: read-only public release with versioned
-          metadata boundary, plus a separate restricted submission and OCR
-          workflow.
+          review. Current public release reflects the 2026-03-27 manuscript
+          freeze, while submit and status pages already connect to a live
+          restricted OCR workflow for post-freeze contributions.
         </p>
       </footer>
     </div>

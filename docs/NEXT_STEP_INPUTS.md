@@ -1,16 +1,21 @@
-# Next-Step Inputs Needed From You
+# Current State And Remaining Inputs
 
-The public shell is now in place. To move from shell to a real deployable
-companion resource, the next step needs a few decisions from you.
+The public explorer and restricted OCR contribution workflow are already live.
+The remaining decisions are about how the project should evolve from the
+current manuscript-freeze release into later public updates.
 
-## 1. Hosting choice
+## 1. Current public host and future migration
 
-Please choose one:
+Current host:
 
-- Cloudflare Pages (recommended)
-- Netlify
-- Vercel
 - GitHub Pages
+
+Future migration options:
+
+- stay on GitHub Pages
+- move the public snapshot to Cloudflare Pages
+- keep the public snapshot on GitHub Pages but migrate the restricted backend
+  later
 
 If you already have an account and preferred platform, that should drive the
 deployment wiring.
@@ -37,7 +42,7 @@ Please confirm:
 - whether author names or lab identity should appear in the footer
 - whether the manuscript title should be echoed directly or shortened
 
-## 4. Public data scope
+## 4. Public data scope for the next freeze
 
 Please specify which public-safe data layers you want included first:
 
@@ -63,19 +68,19 @@ The safest first release is:
 - source-access labels
 - links only where clearly legal
 
-## 6. Launch posture
+## 6. Release posture
 
-Please choose whether the first release should be:
+Please choose how the public site should frame future updates:
 
-- manuscript companion only
-- manuscript companion plus public update log
-- manuscript companion plus a visible “future contribution portal” placeholder
+- manuscript freeze only
+- manuscript freeze plus public update log
+- manuscript freeze plus clearly labeled post-freeze additions
 
 ## 7. What I can do next
 
 Once the above is settled, I can:
 
-1. connect the real frozen dataset to this shell
-2. generate manuscript-aligned downloads and charts
-3. prepare the site for deployment on the chosen host
-4. later redesign the restricted OCR intake around manuscript-freeze and post-freeze update states
+1. tighten the manuscript-freeze vs post-freeze information architecture
+2. generate the next audited public snapshot and charts
+3. add a visible update log and release notes
+4. redesign explorer views around manuscript-freeze records and later additions

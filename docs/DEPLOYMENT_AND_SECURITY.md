@@ -14,8 +14,8 @@ Also acceptable:
 - GitHub Pages
 - Vercel static deployment
 
-The key point is that the public explorer should not need a public
-database, server runtime, or upload surface.
+The key point is that the public explorer snapshot should not need a public
+database or a public restricted-file runtime.
 
 Important nuance:
 
@@ -35,13 +35,14 @@ Important nuance:
 
 ## Security boundary
 
-The browser-facing app should contain only:
+The browser-facing app may contain:
 
 - bibliographic metadata
 - coded variables
 - access-status labels
 - public-domain or open-access source links
 - frozen version information
+- submission and status UI that delegates restricted work to a separate backend
 
 The browser-facing app should **not** contain:
 
@@ -51,18 +52,19 @@ The browser-facing app should **not** contain:
 - reviewer-only notes
 - private contributor identifiers
 
-## Public vs restricted storage
+## Public snapshot vs restricted workflow
 
-Keep public and restricted storage physically separated.
+Keep the versioned public snapshot and the live restricted workflow physically
+separated.
 
-Public bucket:
+Public snapshot:
 
 - frozen JSON/TSV snapshot exports
 - public figures
 - public-domain files
 - open-access files if linking/hosting is legally clear
 
-Restricted bucket:
+Restricted workflow storage:
 
 - contributor uploads
 - copyrighted PDFs
@@ -72,7 +74,8 @@ Restricted bucket:
 
 ## Versioning rule
 
-Each public release should correspond to a clearly named corpus freeze.
+Each public release should correspond to a clearly named manuscript or review
+freeze.
 
 Recommended pattern:
 
@@ -105,16 +108,14 @@ This folder includes a static `_headers` file with a conservative baseline:
 If external analytics or hosted fonts are added later, the CSP must be updated
 deliberately rather than relaxed casually.
 
-## What should stay outside the public explorer
+## What should stay outside the public snapshot
 
-Do not add these to the public app:
+Do not embed these directly into the public static snapshot:
 
-- user accounts
-- upload endpoints
 - OCR job execution
-- contributor dashboards
 - review queues
 - restricted file preview
 
-Those require separate authentication, abuse handling, audit logging, and
-private storage design.
+Those require separate abuse handling, audit logging, and private storage
+design. Public submit/status pages are acceptable as long as they hand off to a
+restricted backend and do not expose restricted files directly.
