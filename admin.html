@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Curator Admin | DID Multilingual Case Explorer</title>
+    <meta
+      name="description"
+      content="Curator-only admin surface for reviewing submitted OCR jobs and preparing post-freeze updates."
+    />
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="stylesheet" href="./styles.css?v=20260409h" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="./index.html#top" aria-label="DID multilingual case explorer home">
+          <span class="brand-mark">D</span>
+          <span class="brand-text">
+            <strong>DID Multilingual Case Explorer</strong>
+            <small>Curator admin</small>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="./index.html#overview">Overview</a>
+          <a href="./submit.html">Submit a paper</a>
+          <a href="./status.html">Track a job</a>
+          <a href="./admin.html" aria-current="page">Curator</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero submit-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Restricted curator surface</p>
+            <h1>Review post-freeze submissions before they enter any later corpus update.</h1>
+            <p class="hero-text">
+              This page is not the security boundary. Access is actually controlled by an
+              admin token on the restricted backend. Use it to review uploaded jobs, decide
+              whether they belong in later updates, and export admin-side records locally.
+            </p>
+            <div class="hero-badges">
+              <span class="pill">Admin token required</span>
+              <span class="pill">Post-freeze queue review</span>
+              <span class="pill">CSV export</span>
+            </div>
+          </div>
+
+          <aside class="hero-panel">
+            <div class="panel-header">
+              <span>Security note</span>
+              <strong>Hidden navigation is only a convenience layer.</strong>
+            </div>
+            <div class="boundary-grid">
+              <article class="boundary-card boundary-card-public">
+                <h2>Visible here</h2>
+                <ul>
+                  <li>Submitted job metadata</li>
+                  <li>Screening state and OCR state</li>
+                  <li>Admin review decisions</li>
+                </ul>
+              </article>
+              <article class="boundary-card boundary-card-restricted">
+                <h2>Still restricted</h2>
+                <ul>
+                  <li>Backend access requires the admin token</li>
+                  <li>PDF files are not publicly listed</li>
+                  <li>Restricted artifacts remain backend-served</li>
+                </ul>
+              </article>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section submit-section">
+          <div class="admin-layout">
+            <aside class="admin-sidebar">
+              <div class="section-header submit-header">
+                <div>
+                  <p class="eyebrow">Admin login</p>
+                  <h2>Connect to the restricted backend.</h2>
+                </div>
+                <p class="section-note">
+                  The token is stored locally in this browser session unless you clear it.
+                </p>
+              </div>
+
+              <div id="admin-config-note" class="info-note" role="status"></div>
+
+              <form id="admin-login-form" class="admin-login-form" novalidate>
+                <div class="filter-group">
+                  <label for="admin-token">Admin token</label>
+                  <input id="admin-token" name="admin_token" type="password" autocomplete="current-password" />
+                </div>
+                <div class="submit-actions">
+                  <button class="button button-primary" type="submit">Log in</button>
+                  <button id="admin-logout" class="button button-secondary" type="button">Clear token</button>
+                </div>
+              </form>
+
+              <div class="filter-group">
+                <label for="admin-source-filter">Job source</label>
+                <select id="admin-source-filter">
+                  <option value="all">All jobs</option>
+                  <option value="public">Public submissions</option>
+                  <option value="private">Private API jobs</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="admin-review-filter">Review state</label>
+                <select id="admin-review-filter">
+                  <option value="all">All review states</option>
+                  <option value="unreviewed">Unreviewed</option>
+                  <option value="include_candidate">Include candidate</option>
+                  <option value="hold">Hold</option>
+                  <option value="exclude">Exclude</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="admin-search">Search jobs</label>
+                <input id="admin-search" type="search" placeholder="Filename, title, author, email" />
+              </div>
+
+              <div class="submit-actions">
+                <button id="admin-refresh" class="button button-secondary" type="button">Refresh jobs</button>
+                <button id="admin-export" class="button button-secondary" type="button">Download CSV</button>
+              </div>
+
+              <div id="admin-session-status" class="info-note" role="status">
+                Log in to load the restricted review queue.
+              </div>
+            </aside>
+
+            <section class="admin-main">
+              <div class="admin-toolbar">
+                <div>
+                  <p class="eyebrow">Restricted review queue</p>
+                  <h2 id="admin-results-headline">No admin session yet.</h2>
+                </div>
+                <div class="admin-toolbar-actions">
+                  <span id="admin-count-pill" class="pill">0 jobs</span>
+                </div>
+              </div>
+
+              <div class="admin-table-shell">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Job</th>
+                      <th>Status</th>
+                      <th>Screening</th>
+                      <th>Review</th>
+                      <th>Snapshot</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-table-body">
+                    <tr>
+                      <td colspan="5">
+                        <div class="admin-empty">Log in to view the restricted submission queue.</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <section id="admin-detail-panel" class="admin-review-shell" hidden>
+                <div class="status-card-header">
+                  <div>
+                    <p class="eyebrow">Selected job</p>
+                    <h3 id="admin-detail-title">No job selected</h3>
+                  </div>
+                  <span id="admin-detail-pill" class="status-pill">idle</span>
+                </div>
+
+                <dl class="admin-detail-grid" id="admin-detail-grid"></dl>
+
+                <form id="admin-review-form" class="admin-review-form" novalidate>
+                  <div class="form-grid">
+                    <div class="filter-group">
+                      <label for="admin-review-state">Review state</label>
+                      <select id="admin-review-state" name="admin_review_state">
+                        <option value="unreviewed">Unreviewed</option>
+                        <option value="include_candidate">Include candidate</option>
+                        <option value="hold">Hold</option>
+                        <option value="exclude">Exclude</option>
+                      </select>
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="admin-public-release-cohort">Release cohort</label>
+                      <input
+                        id="admin-public-release-cohort"
+                        name="public_release_cohort"
+                        type="text"
+                        placeholder="e.g. post_freeze_update_01"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="submit-consent-grid">
+                    <label class="checkbox-row">
+                      <input id="admin-include-in-public-update" name="include_in_public_update" type="checkbox" />
+                      <span>Mark as a candidate for a later public update.</span>
+                    </label>
+                    <label class="checkbox-row">
+                      <input
+                        id="admin-contributor-display-approved"
+                        name="contributor_display_approved"
+                        type="checkbox"
+                      />
+                      <span>Approve contributor display if the submitter requested public credit.</span>
+                    </label>
+                  </div>
+
+                  <div class="filter-group filter-group-wide">
+                    <label for="admin-notes">Admin notes</label>
+                    <textarea id="admin-notes" name="admin_notes" rows="5"></textarea>
+                  </div>
+
+                  <div class="admin-detail-actions">
+                    <button class="button button-primary" type="submit">Save review decision</button>
+                    <button id="admin-delete-job" class="button button-secondary danger-button" type="button">
+                      Delete local job
+                    </button>
+                  </div>
+                </form>
+
+                <div id="admin-detail-status" class="info-note status-note" role="status">
+                  Select a job to review or export.
+                </div>
+              </section>
+            </section>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>
+          Curator decisions do not automatically change the public snapshot. They prepare a
+          later audited update.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="./admin.js?v=20260409h"></script>
+  </body>
+</html>
