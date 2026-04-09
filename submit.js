@@ -33,6 +33,7 @@ function configuredTurnstileSiteKey() {
 function setStatus(message, tone = "neutral") {
   statusBox.textContent = message;
   statusBox.dataset.tone = tone;
+  statusBox.hidden = !message;
 }
 
 function buildStatusUrl(jobId, accessToken) {
