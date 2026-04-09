@@ -1,11 +1,11 @@
 # DID Companion Explorer
 
-This directory contains the Phase 1 public shell for the multilingual DID/MPD
+This directory contains the public explorer for the multilingual DID/MPD
 case-literature companion resource.
 
 ## Current scope
 
-This build is intentionally public and read-only.
+This build is intentionally public and read-only at the metadata layer.
 
 It is designed to expose:
 
@@ -20,13 +20,13 @@ It is explicitly **not** the place to store or serve:
 - contributor uploads
 - restricted PDFs
 - OCR return artifacts for private documents
-- any authenticated intake workflow
+- any authenticated or restricted workflow UI
 
-Those belong in a separate Phase 2 service.
+Restricted intake and private OCR handling live outside this public build.
 
 ## Why this implementation is static
 
-The safest and most maintainable Phase 1 architecture is a static frontend with
+The safest and most maintainable public architecture is a static frontend with
 no public backend.
 
 Benefits:
@@ -59,7 +59,7 @@ Then open `http://localhost:8080`.
 
 ## Recommended deployment target
 
-Cloudflare Pages is the preferred public host for this phase because it is
+Cloudflare Pages is the preferred public host for this explorer because it is
 well-suited to static delivery and leaves a clean upgrade path to later
-Workers/R2-based private workflows if the project eventually adds contributor
-intake or authenticated OCR return flows.
+Workers/R2-based private workflows if the restricted backend is later migrated
+off the local service stack.

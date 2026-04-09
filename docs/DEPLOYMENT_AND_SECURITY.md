@@ -1,6 +1,6 @@
 # Deployment And Security
 
-## Recommended Phase 1 architecture
+## Recommended public architecture
 
 Use a static hosting platform for the public explorer.
 
@@ -14,7 +14,7 @@ Also acceptable:
 - GitHub Pages
 - Vercel static deployment
 
-The key point is that the public Phase 1 build should not need a public
+The key point is that the public explorer should not need a public
 database, server runtime, or upload surface.
 
 Important nuance:
@@ -22,7 +22,7 @@ Important nuance:
 - GitHub Pages is acceptable for the first release
 - but it does not give the same custom-header control as Cloudflare Pages or
   Netlify
-- for this project that is tolerable because the Phase 1 site is read-only and
+- for this project that is tolerable because the public site is read-only and
   does not expose restricted material
 
 ## Why Cloudflare Pages is the best fit
@@ -30,8 +30,8 @@ Important nuance:
 - strong static hosting
 - simple custom-domain support
 - security headers supported through `_headers`
-- easy future path to Workers, R2, and Turnstile if a separate Phase 2 private
-  workflow is later added
+- easy future path to Workers, R2, and Turnstile if the restricted workflow is
+  later migrated to managed infrastructure
 
 ## Security boundary
 
@@ -53,7 +53,7 @@ The browser-facing app should **not** contain:
 
 ## Public vs restricted storage
 
-If later phases are added, keep storage physically separated.
+Keep public and restricted storage physically separated.
 
 Public bucket:
 
@@ -105,9 +105,9 @@ This folder includes a static `_headers` file with a conservative baseline:
 If external analytics or hosted fonts are added later, the CSP must be updated
 deliberately rather than relaxed casually.
 
-## What should wait for Phase 2
+## What should stay outside the public explorer
 
-Do not add these to the public app in the first release:
+Do not add these to the public app:
 
 - user accounts
 - upload endpoints

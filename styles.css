@@ -1,5 +1,6 @@
 :root {
   --bg: #f4efe7;
+  --bg-strong: #ece4d8;
   --surface: rgba(255, 252, 247, 0.78);
   --surface-strong: rgba(255, 252, 247, 0.94);
   --ink: #172226;
@@ -788,7 +789,7 @@ h3 {
 .submit-card,
 .submit-side > .governance-card {
   border-radius: var(--radius-xl);
-  background: var(--surface);
+  background: rgba(236, 228, 216, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
@@ -811,11 +812,10 @@ h3 {
 .submit-status,
 .info-note {
   margin-bottom: 18px;
-  padding: 14px 16px 14px 18px;
+  padding: 16px 18px;
   border-radius: 16px;
-  border: 1px solid rgba(23, 34, 38, 0.08);
-  border-left: 4px solid rgba(159, 62, 47, 0.28);
-  background: rgba(255, 255, 255, 0.46);
+  border: 1px solid rgba(23, 34, 38, 0.12);
+  background: transparent;
   color: var(--ink-soft);
   line-height: 1.7;
 }
@@ -830,7 +830,7 @@ h3 {
   padding: 18px;
   border-radius: 20px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.68);
+  background: transparent;
 }
 
 .status-link-label {
@@ -868,16 +868,14 @@ h3 {
 .info-note[data-tone="warning"],
 .status-detail-box[data-tone="warning"] {
   border-color: rgba(183, 136, 71, 0.35);
-  border-left-color: rgba(183, 136, 71, 0.7);
-  background: rgba(183, 136, 71, 0.12);
+  background: transparent;
   color: var(--accent-deep);
 }
 
 .submit-status[data-tone="success"],
 .info-note[data-tone="success"] {
   border-color: rgba(60, 127, 93, 0.3);
-  border-left-color: rgba(60, 127, 93, 0.7);
-  background: rgba(60, 127, 93, 0.12);
+  background: transparent;
   color: #214f3b;
 }
 
@@ -885,8 +883,7 @@ h3 {
 .info-note[data-tone="error"],
 .status-detail-box[data-tone="error"] {
   border-color: rgba(159, 62, 47, 0.32);
-  border-left-color: rgba(159, 62, 47, 0.7);
-  background: rgba(159, 62, 47, 0.1);
+  background: transparent;
   color: var(--accent-deep);
 }
 
@@ -897,40 +894,55 @@ h3 {
 
 .optional-panel {
   margin: 12px 0 22px;
-  padding: 10px;
+  padding: 0;
   border-radius: 20px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.42);
+  background: transparent;
+  overflow: hidden;
 }
 
 .optional-panel[open] {
-  padding-top: 10px;
+  padding-bottom: 16px;
 }
 
 .optional-panel summary {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
+  column-gap: 12px;
   cursor: pointer;
   list-style: none;
   color: var(--accent-deep);
   font-weight: 700;
   letter-spacing: 0.02em;
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(159, 62, 47, 0.14);
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  padding: 18px 18px 16px;
+  background: transparent;
 }
 
 .optional-panel summary::-webkit-details-marker {
   display: none;
 }
 
+.optional-panel summary span {
+  display: block;
+}
+
+.optional-panel summary small {
+  display: block;
+  grid-column: 1 / 2;
+  margin-top: 6px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .optional-panel summary::after {
   content: "+";
   font-size: 1.15rem;
   line-height: 1;
+  grid-column: 2 / 3;
+  grid-row: 1 / span 2;
 }
 
 .optional-panel[open] summary::after {
@@ -938,8 +950,8 @@ h3 {
 }
 
 .optional-grid {
-  margin-top: 14px;
-  padding: 4px 6px 2px;
+  margin-top: 0;
+  padding: 0 18px 4px;
 }
 
 .form-grid {
@@ -964,6 +976,25 @@ h3 {
   padding: 12px 14px;
   color: var(--ink);
   font: inherit;
+}
+
+.status-form {
+  gap: 12px;
+}
+
+.status-note {
+  margin-top: 28px;
+}
+
+.status-result + .status-result {
+  margin-top: 22px;
+}
+
+.status-detail-box {
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(23, 34, 38, 0.12);
+  background: transparent;
 }
 
 .submission-form input[type="file"] {
@@ -1045,7 +1076,7 @@ h3 {
   padding: 14px;
   border-radius: 16px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.56);
+  background: transparent;
 }
 
 .status-meta-item dt {
@@ -1059,14 +1090,6 @@ h3 {
   margin: 0;
   color: var(--ink);
   font-weight: 600;
-}
-
-.status-detail-box {
-  padding: 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(23, 34, 38, 0.08);
-  border-left: 4px solid rgba(159, 62, 47, 0.22);
-  background: rgba(255, 255, 255, 0.4);
 }
 
 .recent-job-list {

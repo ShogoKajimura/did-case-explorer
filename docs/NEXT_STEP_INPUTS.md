@@ -78,4 +78,4 @@ Once the above is settled, I can:
 1. connect the real frozen dataset to this shell
 2. generate manuscript-aligned downloads and charts
 3. prepare the site for deployment on the chosen host
-4. later design a separate authenticated Phase 2 OCR intake system
+4. later redesign the restricted OCR intake around manuscript-freeze and post-freeze update states
