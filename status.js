@@ -15,6 +15,8 @@ const originalFilename = document.querySelector("#status-original-filename");
 const createdAt = document.querySelector("#status-created-at");
 const updatedAt = document.querySelector("#status-updated-at");
 const workerState = document.querySelector("#status-state");
+const queuePosition = document.querySelector("#status-queue-position");
+const jobsAhead = document.querySelector("#status-jobs-ahead");
 const detailBox = document.querySelector("#status-detail");
 const downloadSearchablePdfButton = document.querySelector("#download-searchable-pdf");
 const downloadCanonicalTextButton = document.querySelector("#download-canonical-text");
@@ -186,6 +188,16 @@ function renderResult(payload) {
   createdAt.textContent = formatTimestamp(payload.createdAt);
   updatedAt.textContent = formatTimestamp(payload.updatedAt);
   workerState.textContent = payload.status;
+  queuePosition.textContent =
+    payload.queuePosition && payload.queueDepth
+      ? `${payload.queuePosition} / ${payload.queueDepth}`
+      : payload.status === "completed" || payload.status === "failed"
+        ? "Completed"
+        : "-";
+  jobsAhead.textContent =
+    payload.status === "pending" || payload.status === "processing"
+      ? String(payload.jobsAhead ?? 0)
+      : "0";
   detailBox.textContent = payload.error || payload.screeningMessage || payload.message;
   detailBox.dataset.tone = payload.status === "failed" ? "error" : payload.screeningStatus === "needs_information" ? "warning" : "neutral";
 
