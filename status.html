@@ -167,6 +167,86 @@
                   </button>
                 </div>
               </section>
+
+              <section id="metadata-panel" class="status-result" hidden>
+                <div class="status-card-header">
+                  <div>
+                    <p class="eyebrow">Optional follow-up details</p>
+                    <h3>Save bibliographic or contributor information while the OCR job runs.</h3>
+                  </div>
+                  <span class="pill">Private metadata</span>
+                </div>
+
+                <form id="metadata-form" class="submission-form" novalidate>
+                  <div class="form-grid">
+                    <div class="filter-group">
+                      <label for="meta-paper-title">Paper title</label>
+                      <input id="meta-paper-title" name="paper_title" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="meta-paper-authors">Authors</label>
+                      <input id="meta-paper-authors" name="paper_authors" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="meta-paper-year">Year</label>
+                      <input id="meta-paper-year" name="paper_year" type="text" inputmode="numeric" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="meta-paper-journal">Journal / source</label>
+                      <input id="meta-paper-journal" name="paper_journal" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="meta-source-url">DOI or source URL</label>
+                      <input id="meta-source-url" name="source_url" type="url" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="meta-submitter-name">Your name</label>
+                      <input id="meta-submitter-name" name="submitter_name" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="meta-submitter-email">Email</label>
+                      <input id="meta-submitter-email" name="submitter_email" type="email" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="meta-submitter-affiliation">Affiliation</label>
+                      <input id="meta-submitter-affiliation" name="submitter_affiliation" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="meta-contributor-display-name">Public contributor name</label>
+                      <input
+                        id="meta-contributor-display-name"
+                        name="contributor_display_name"
+                        type="text"
+                        placeholder="If entered, this will be treated as consent to display your name."
+                      />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="meta-contributor-link-url">Contributor homepage / lab link</label>
+                      <input id="meta-contributor-link-url" name="contributor_link_url" type="url" />
+                    </div>
+
+                    <div class="filter-group filter-group-wide">
+                      <label for="meta-notes">Notes</label>
+                      <textarea id="meta-notes" name="notes" rows="4"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="submit-actions">
+                    <button id="save-metadata-button" class="button button-secondary" type="submit">
+                      Save optional details
+                    </button>
+                  </div>
+                </form>
+              </section>
             </section>
 
             <aside class="submit-side">

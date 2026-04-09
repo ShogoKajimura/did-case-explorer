@@ -20,6 +20,9 @@ const downloadSearchablePdfButton = document.querySelector("#download-searchable
 const downloadCanonicalTextButton = document.querySelector("#download-canonical-text");
 const copyLinkButton = document.querySelector("#status-copy-link");
 const recentJobsShell = document.querySelector("#recent-jobs");
+const metadataPanel = document.querySelector("#metadata-panel");
+const metadataForm = document.querySelector("#metadata-form");
+const saveMetadataButton = document.querySelector("#save-metadata-button");
 
 let pollTimerId = null;
 let currentJob = null;
@@ -172,6 +175,7 @@ function renderRecentJobs() {
 
 function renderResult(payload) {
   resultSection.hidden = false;
+  metadataPanel.hidden = false;
   headline.textContent = payload.message;
   pill.textContent = payload.status;
   pill.dataset.state = payload.status;
@@ -183,6 +187,61 @@ function renderResult(payload) {
 
   downloadSearchablePdfButton.disabled = !payload.searchablePdfReady;
   downloadCanonicalTextButton.disabled = !payload.canonicalTextReady;
+}
+
+function metadataEndpoint(jobId) {
+  return `${apiBaseUrl()}/api/v1/public/jobs/${encodeURIComponent(jobId)}/metadata`;
+}
+
+async function loadMetadata(jobId, accessToken) {
+  const response = await fetch(metadataEndpoint(jobId), {
+    headers: {
+      "X-Job-Access-Token": accessToken,
+    },
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload.detail || `Metadata lookup failed with status ${response.status}.`);
+  }
+  return payload;
+}
+
+function fillMetadataForm(payload) {
+  metadataForm.elements.submitter_name.value = payload.submitterName || "";
+  metadataForm.elements.submitter_email.value = payload.submitterEmail || "";
+  metadataForm.elements.submitter_affiliation.value = payload.submitterAffiliation || "";
+  metadataForm.elements.contributor_display_name.value = payload.contributorDisplayName || "";
+  metadataForm.elements.contributor_link_url.value = payload.contributorLinkUrl || "";
+  metadataForm.elements.paper_title.value = payload.paperTitle || "";
+  metadataForm.elements.paper_authors.value = payload.paperAuthors || "";
+  metadataForm.elements.paper_year.value = payload.paperYear || "";
+  metadataForm.elements.paper_journal.value = payload.paperJournal || "";
+  metadataForm.elements.source_url.value = payload.sourceUrl || "";
+  metadataForm.elements.notes.value = payload.notes || "";
+}
+
+async function saveMetadata(options = {}) {
+  const { quiet = false } = options;
+  if (!currentJob?.jobId || !currentJob?.accessToken) {
+    return false;
+  }
+  const formData = new FormData(metadataForm);
+  const response = await fetch(metadataEndpoint(currentJob.jobId), {
+    method: "POST",
+    headers: {
+      "X-Job-Access-Token": currentJob.accessToken,
+    },
+    body: formData,
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload.detail || `Metadata save failed with status ${response.status}.`);
+  }
+  fillMetadataForm(payload);
+  if (!quiet) {
+    setMessage("Optional details were saved to the restricted job record.", "success");
+  }
+  return true;
 }
 
 async function fetchStatus(jobId, accessToken) {
@@ -221,6 +280,12 @@ async function loadStatus() {
     syncBrowserUrl();
     rememberCurrentJob();
     renderResult(payload);
+    try {
+      const metadata = await loadMetadata(jobId, accessToken);
+      fillMetadataForm(metadata);
+    } catch (metadataError) {
+      console.error(metadataError);
+    }
 
     const tone = payload.status === "failed" ? "error" : payload.status === "completed" ? "success" : "neutral";
     setMessage(payload.message, tone);
@@ -239,6 +304,12 @@ async function downloadArtifact(artifact) {
   if (!currentJob?.jobId || !currentJob?.accessToken) {
     setMessage("Load a valid private job before downloading artifacts.", "warning");
     return;
+  }
+  try {
+    await saveMetadata({ quiet: true });
+  } catch (metadataError) {
+    console.error(metadataError);
+    setMessage(metadataError.message || "Could not save optional details before download.", "warning");
   }
   const response = await fetch(
     `${apiBaseUrl()}/api/v1/public/jobs/${encodeURIComponent(currentJob.jobId)}/download/${artifact}`,
@@ -321,6 +392,15 @@ downloadCanonicalTextButton.addEventListener("click", async () => {
 });
 
 copyLinkButton.addEventListener("click", copyCurrentLink);
+metadataForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  try {
+    await saveMetadata();
+  } catch (error) {
+    console.error(error);
+    setMessage(error.message || "Could not save optional details.", "error");
+  }
+});
 
 renderConfigNote();
 renderRecentJobs();

@@ -35,6 +35,11 @@ const detailContent = document.querySelector("#detail-content");
 const visualCards = document.querySelector("#visual-cards");
 const snapshotPill = document.querySelector("#snapshot-pill");
 const contributorCards = document.querySelector("#contributor-cards");
+const pageSizeSelect = document.querySelector("#page-size");
+const pageSummary = document.querySelector("#page-summary");
+const pageIndicator = document.querySelector("#page-indicator");
+const prevPageButton = document.querySelector("#page-prev");
+const nextPageButton = document.querySelector("#page-next");
 
 const state = {
   query: "",
@@ -42,6 +47,8 @@ const state = {
   structure: "all",
   access: "all",
   signal: "all",
+  pageSize: 10,
+  page: 1,
   selectedId: null,
 };
 
@@ -223,6 +230,22 @@ function getFilteredRecords() {
   });
 }
 
+function maxPage(filteredCount) {
+  if (state.pageSize === "all") {
+    return 1;
+  }
+  return Math.max(1, Math.ceil(filteredCount / Number(state.pageSize)));
+}
+
+function visibleRecords(filtered) {
+  if (state.pageSize === "all") {
+    return filtered;
+  }
+  const size = Number(state.pageSize);
+  const start = (state.page - 1) * size;
+  return filtered.slice(start, start + size);
+}
+
 function renderDetail(record) {
   if (!record) {
     detailTitle.textContent = "Select a record";
@@ -281,7 +304,17 @@ function renderDetail(record) {
 
 function renderTable() {
   const filtered = getFilteredRecords();
+  const totalPages = maxPage(filtered.length);
+  state.page = Math.min(state.page, totalPages);
+  const visible = visibleRecords(filtered);
+  const firstIndex = filtered.length === 0 ? 0 : state.pageSize === "all" ? 1 : (state.page - 1) * Number(state.pageSize) + 1;
+  const lastIndex = filtered.length === 0 ? 0 : state.pageSize === "all" ? filtered.length : Math.min(filtered.length, firstIndex + visible.length - 1);
+
   resultsCount.textContent = `${filtered.length} record${filtered.length === 1 ? "" : "s"} in the frozen public snapshot`;
+  pageSummary.textContent = `Showing ${firstIndex}\u2013${lastIndex}`;
+  pageIndicator.textContent = `Page ${state.page} / ${totalPages}`;
+  prevPageButton.disabled = state.page <= 1;
+  nextPageButton.disabled = state.page >= totalPages;
   recordTableBody.innerHTML = "";
   emptyState.hidden = filtered.length !== 0;
 
@@ -290,11 +323,11 @@ function renderTable() {
     return;
   }
 
-  if (!filtered.some((record) => record.id === state.selectedId)) {
-    state.selectedId = filtered[0].id;
+  if (!visible.some((record) => record.id === state.selectedId)) {
+    state.selectedId = visible[0].id;
   }
 
-  filtered.forEach((record) => {
+  visible.forEach((record) => {
     const row = document.createElement("tr");
     row.tabIndex = 0;
     row.className = record.id === state.selectedId ? "is-selected" : "";
@@ -327,7 +360,7 @@ function renderTable() {
     recordTableBody.append(row);
   });
 
-  renderDetail(filtered.find((record) => record.id === state.selectedId) || null);
+  renderDetail(visible.find((record) => record.id === state.selectedId) || null);
 }
 
 function syncStateFromInputs() {
@@ -335,6 +368,7 @@ function syncStateFromInputs() {
   state.language = languageFilter.value;
   state.structure = structureFilter.value;
   state.access = accessFilter.value;
+  state.page = 1;
   state.signal = signalFilter.value;
   renderTable();
 }
@@ -345,6 +379,8 @@ function resetFilters() {
   state.structure = "all";
   state.access = "all";
   state.signal = "all";
+  state.page = 1;
+  state.pageSize = pageSizeSelect.value === "all" ? "all" : Number(pageSizeSelect.value || 10);
 
   searchInput.value = "";
   languageFilter.value = "all";
@@ -390,6 +426,7 @@ function populateFilters() {
 
   signalFilter.addEventListener("change", () => {
     state.signal = signalFilter.value === "all" ? "all" : signalMap.get(signalFilter.value);
+    state.page = 1;
     renderTable();
   });
 }
@@ -428,6 +465,19 @@ async function init() {
     element.addEventListener("change", syncStateFromInputs);
   });
 
+  pageSizeSelect.addEventListener("change", () => {
+    state.pageSize = pageSizeSelect.value === "all" ? "all" : Number(pageSizeSelect.value);
+    state.page = 1;
+    renderTable();
+  });
+  prevPageButton.addEventListener("click", () => {
+    state.page = Math.max(1, state.page - 1);
+    renderTable();
+  });
+  nextPageButton.addEventListener("click", () => {
+    state.page += 1;
+    renderTable();
+  });
   resetButton.addEventListener("click", resetFilters);
 }
 

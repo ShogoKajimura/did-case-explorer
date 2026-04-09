@@ -84,9 +84,9 @@
                   <h2>Submit one PDF at a time.</h2>
                 </div>
                 <p class="section-note">
-                  The public page posts to a separate restricted OCR backend. If that
-                  backend is not configured yet, the form will stay visible but submission
-                  will be disabled.
+                  Minimal submission is intentional. Only the PDF and the lawful-access
+                  confirmation are required to start OCR. Optional bibliographic or
+                  contributor details can be added now or later from the private status page.
                 </p>
               </div>
 
@@ -94,92 +94,96 @@
 
               <form id="submission-form" class="submission-form" novalidate>
                 <div class="form-grid">
-                  <div class="filter-group">
-                    <label for="submitter-name">Your name</label>
-                    <input id="submitter-name" name="submitter_name" type="text" required />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="submitter-email">Email for backup contact</label>
-                    <input id="submitter-email" name="submitter_email" type="email" />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="submitter-affiliation">Affiliation</label>
-                    <input id="submitter-affiliation" name="submitter_affiliation" type="text" />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="languages">OCR language code(s)</label>
-                    <input
-                      id="languages"
-                      name="languages"
-                      type="text"
-                      placeholder="e.g. jpn+eng or fra+eng"
-                      required
-                    />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="paper-title">Paper title</label>
-                    <input id="paper-title" name="paper_title" type="text" />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="paper-authors">Authors</label>
-                    <input id="paper-authors" name="paper_authors" type="text" />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="paper-year">Year</label>
-                    <input id="paper-year" name="paper_year" type="text" inputmode="numeric" />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="paper-journal">Journal / source</label>
-                    <input id="paper-journal" name="paper_journal" type="text" />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="source-url">DOI or source URL</label>
-                    <input id="source-url" name="source_url" type="url" />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="contributor-display-name">Public contributor name</label>
-                    <input
-                      id="contributor-display-name"
-                      name="contributor_display_name"
-                      type="text"
-                      placeholder="Optional"
-                    />
-                  </div>
-
-                  <div class="filter-group">
-                    <label for="contributor-link-url">Contributor homepage / lab link</label>
-                    <input
-                      id="contributor-link-url"
-                      name="contributor_link_url"
-                      type="url"
-                      placeholder="Optional"
-                    />
-                  </div>
-
-                  <div class="filter-group filter-group-wide">
-                    <label for="notes">Notes for the curator</label>
-                    <textarea
-                      id="notes"
-                      name="notes"
-                      rows="5"
-                      placeholder="Anything useful: likely case report, country, scan quality, issue numbers, missing pages, prior OCR problems, etc."
-                    ></textarea>
-                  </div>
-
                   <div class="filter-group filter-group-wide">
                     <label for="file">PDF upload</label>
                     <input id="file" name="file" type="file" accept=".pdf,application/pdf" required />
                   </div>
                 </div>
+
+                <details class="optional-panel">
+                  <summary>Optional details for better OCR, citation, and contributor credit</summary>
+                  <div class="form-grid optional-grid">
+                    <div class="filter-group">
+                      <label for="languages">OCR language code(s)</label>
+                      <input
+                        id="languages"
+                        name="languages"
+                        type="text"
+                        placeholder="Optional, e.g. jpn+eng or fra+eng"
+                      />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="submitter-name">Your name</label>
+                      <input id="submitter-name" name="submitter_name" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="submitter-email">Email for backup contact</label>
+                      <input id="submitter-email" name="submitter_email" type="email" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="submitter-affiliation">Affiliation</label>
+                      <input id="submitter-affiliation" name="submitter_affiliation" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="paper-title">Paper title</label>
+                      <input id="paper-title" name="paper_title" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="paper-authors">Authors</label>
+                      <input id="paper-authors" name="paper_authors" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="paper-year">Year</label>
+                      <input id="paper-year" name="paper_year" type="text" inputmode="numeric" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="paper-journal">Journal / source</label>
+                      <input id="paper-journal" name="paper_journal" type="text" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="source-url">DOI or source URL</label>
+                      <input id="source-url" name="source_url" type="url" />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="contributor-display-name">Public contributor name</label>
+                      <input
+                        id="contributor-display-name"
+                        name="contributor_display_name"
+                        type="text"
+                        placeholder="If entered, this will be treated as consent to display your name."
+                      />
+                    </div>
+
+                    <div class="filter-group">
+                      <label for="contributor-link-url">Contributor homepage / lab link</label>
+                      <input
+                        id="contributor-link-url"
+                        name="contributor_link_url"
+                        type="url"
+                        placeholder="Optional"
+                      />
+                    </div>
+
+                    <div class="filter-group filter-group-wide">
+                      <label for="notes">Notes for the curator</label>
+                      <textarea
+                        id="notes"
+                        name="notes"
+                        rows="5"
+                        placeholder="Anything useful: likely case report, country, scan quality, issue numbers, missing pages, prior OCR problems, etc."
+                      ></textarea>
+                    </div>
+                  </div>
+                </details>
 
                 <input id="website" name="website" type="text" class="honeypot-field" tabindex="-1" autocomplete="off" />
 
@@ -189,13 +193,6 @@
                     <span>
                       I confirm that I have lawful access to this PDF and may submit it for restricted OCR
                       processing and review support.
-                    </span>
-                  </label>
-
-                  <label class="checkbox-row">
-                    <input id="display-contributor" name="display_contributor" type="checkbox" />
-                    <span>
-                      If this submission is used, you may display my contributor name on the public explorer.
                     </span>
                   </label>
                 </div>
@@ -252,9 +249,9 @@
               <article class="governance-card">
                 <h3>Contributor credit</h3>
                 <p>
-                  Names are shown publicly only if you opt in. If you provide a homepage,
-                  lab page, or ORCID URL, the directory can link your name out from the
-                  top section of the explorer.
+                  If you later choose to enter a public contributor name, the explorer can
+                  display that name and optionally link it to a homepage, lab page, or
+                  ORCID profile. Leaving those fields blank keeps the contribution private.
                 </p>
               </article>
             </aside>

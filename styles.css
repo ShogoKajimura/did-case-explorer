@@ -321,7 +321,9 @@ h3 {
 }
 
 .boundary-card-restricted ul,
-.boundary-card-restricted h2 {
+.boundary-card-restricted h2,
+.boundary-card-restricted li,
+.boundary-card-restricted li::marker {
   color: inherit;
 }
 
@@ -524,6 +526,26 @@ h3 {
   margin: 0 0 4px;
 }
 
+.toolbar-control {
+  display: inline-grid;
+  gap: 6px;
+  min-width: 112px;
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.toolbar-control select {
+  min-height: 38px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 0 12px;
+  color: var(--ink);
+  font: inherit;
+}
+
 .table-card {
   overflow: hidden;
   border-radius: 18px;
@@ -587,6 +609,25 @@ h3 {
 .empty-state {
   padding: 26px;
   color: var(--ink-soft);
+}
+
+.table-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.page-summary {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .detail-content {
@@ -840,6 +881,42 @@ h3 {
   gap: 6px;
 }
 
+.optional-panel {
+  margin-bottom: 18px;
+  padding: 0 16px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.optional-panel[open] {
+  padding-top: 14px;
+}
+
+.optional-panel summary {
+  cursor: pointer;
+  list-style: none;
+  color: var(--accent-deep);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.optional-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.optional-panel summary::after {
+  content: " +";
+}
+
+.optional-panel[open] summary::after {
+  content: " -";
+}
+
+.optional-grid {
+  margin-top: 14px;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1058,6 +1135,11 @@ h3 {
 
   .section-header,
   .explorer-toolbar {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .table-pagination {
     flex-direction: column;
     align-items: start;
   }

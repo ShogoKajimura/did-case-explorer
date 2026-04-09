@@ -196,6 +196,7 @@ async function submitForm(event) {
       accessToken: payload.accessToken,
       statusUrl,
       createdAt: new Date().toISOString(),
+      originalFilename: formData.get("file")?.name || "",
     });
 
     form.reset();

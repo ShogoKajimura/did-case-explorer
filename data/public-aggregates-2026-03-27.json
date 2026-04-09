@@ -13,7 +13,7 @@
     "219 retained sources",
     "20 languages",
     "42 countries or regions",
-    "Public metadata boundary"
+    "Live restricted OCR intake"
   ],
   "aggregateCards": [
     {
@@ -39,7 +39,7 @@
     {
       "label": "OCR-managed records",
       "value": "20",
-      "note": "Local OCR but no public full text"
+      "note": "Restricted OCR workflow active"
     }
   ],
   "visualizations": [
