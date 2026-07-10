@@ -104,6 +104,11 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
+function shortIds(list) {
+  if (!Array.isArray(list) || !list.length) return "";
+  return list.map((id) => String(id).slice(0, 8)).join(", ");
+}
+
 function currentJobs() {
   const needle = searchInput.value.trim().toLowerCase();
   return adminJobs.filter((job) => {
@@ -149,7 +154,7 @@ function renderTable() {
         <tr class="${job.jobId === selectedJobId ? "admin-row-active" : ""}">
           <td>
             <button class="admin-row-button" type="button" data-job-id="${escapeHtml(job.jobId)}">
-              <strong>${escapeHtml(job.originalFilename)}</strong><br />
+              <strong>${escapeHtml(job.originalFilename)}</strong>${dupBadge(job)}<br />
               <span class="recent-job-meta">${escapeHtml(job.jobId)} · ${escapeHtml(formatTimestamp(job.createdAt))}</span>
             </button>
           </td>
@@ -165,6 +170,17 @@ function renderTable() {
   tableBody.querySelectorAll("[data-job-id]").forEach((button) => {
     button.addEventListener("click", () => selectJob(button.dataset.jobId));
   });
+}
+
+function dupBadge(job) {
+  const badges = [];
+  if (job.duplicateOf?.length) {
+    badges.push(`<span class="admin-badge" title="${job.duplicateOf.length} identical-file submission(s)">⧉ dup ${job.duplicateOf.length}</span>`);
+  }
+  if (job.relatedOf?.length) {
+    badges.push(`<span class="admin-badge admin-badge-related" title="${job.relatedOf.length} same-paper submission(s)">↔ related ${job.relatedOf.length}</span>`);
+  }
+  return badges.length ? ` ${badges.join(" ")}` : "";
 }
 
 function detailCard(label, value) {
@@ -197,11 +213,30 @@ function selectJob(jobId) {
     detailCard("Created", formatTimestamp(job.createdAt)),
     detailCard("Updated", formatTimestamp(job.updatedAt)),
     detailCard("Screening", job.screeningStatus),
+    detailCard(
+      "Relevance score",
+      job.relevanceScore == null ? "keyword-only" : job.relevanceScore.toFixed(3),
+    ),
     detailCard("OCR languages", job.ocrLanguagesUsed || job.languages),
+    detailCard("Structured Markdown", job.markdownStatus || "-"),
     detailCard("Downloads", job.downloadsAllowed ? "allowed" : "held"),
-    detailCard("Authors", job.paperAuthors || "-"),
-    detailCard("Journal", job.paperJournal || "-"),
-    detailCard("Year", job.paperYear || "-"),
+    detailCard(
+      "Duplicates (same file)",
+      job.duplicateOf?.length ? `${job.duplicateOf.length} — ${shortIds(job.duplicateOf)}` : "none",
+    ),
+    detailCard(
+      "Related (same paper)",
+      job.relatedOf?.length ? `${job.relatedOf.length} — ${shortIds(job.relatedOf)}` : "none",
+    ),
+    detailCard("Auto DOI", job.biblioDoi || "-"),
+    detailCard("Auto title", job.biblioTitle || "-"),
+    detailCard("Auto authors", job.biblioAuthors || "-"),
+    detailCard(
+      "Auto journal / year",
+      [job.biblioJournal, job.biblioYear].filter(Boolean).join(" · ") || "-",
+    ),
+    detailCard("Submitter authors", job.paperAuthors || "-"),
+    detailCard("Submitter journal", job.paperJournal || "-"),
     detailCard("Source URL", job.sourceUrl || "-"),
     detailCard("Submitter email", job.submitterEmail || "-"),
     detailCard("Contributor requested", job.contributorDisplayRequested ? "yes" : "no"),

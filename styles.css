@@ -1401,3 +1401,22 @@ h3 {
     grid-template-columns: 1fr;
   }
 }
+
+.admin-badge {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.08rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  white-space: nowrap;
+}
+
+.admin-badge-related {
+  background: rgba(183, 136, 71, 0.28);
+  color: #6d4e1e;
+}

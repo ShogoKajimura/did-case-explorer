@@ -20,6 +20,7 @@ const jobsAhead = document.querySelector("#status-jobs-ahead");
 const detailBox = document.querySelector("#status-detail");
 const downloadSearchablePdfButton = document.querySelector("#download-searchable-pdf");
 const downloadCanonicalTextButton = document.querySelector("#download-canonical-text");
+const downloadMarkdownButton = document.querySelector("#download-markdown");
 const copyLinkButton = document.querySelector("#status-copy-link");
 const recentJobsShell = document.querySelector("#recent-jobs");
 const metadataPanel = document.querySelector("#metadata-panel");
@@ -203,6 +204,10 @@ function renderResult(payload) {
 
   downloadSearchablePdfButton.disabled = !payload.searchablePdfReady || !payload.downloadsAllowed;
   downloadCanonicalTextButton.disabled = !payload.canonicalTextReady || !payload.downloadsAllowed;
+  // The structured Markdown is best-effort; only offer it when the backend produced it.
+  const markdownReady = Boolean(payload.canonicalMarkdownReady);
+  downloadMarkdownButton.hidden = !markdownReady;
+  downloadMarkdownButton.disabled = !markdownReady || !payload.downloadsAllowed;
   downloadNote.textContent = payload.downloadsAllowed
     ? "Artifacts are available when the buttons below are enabled."
     : payload.screeningMessage || "Downloads are temporarily held on the restricted backend.";
@@ -356,7 +361,12 @@ async function downloadArtifact(artifact) {
 
   const disposition = response.headers.get("Content-Disposition") || "";
   const filenameMatch = disposition.match(/filename=\"?([^"]+)\"?/i);
-  anchor.download = filenameMatch?.[1] || (artifact === "searchable-pdf" ? "searchable.pdf" : "canonical.txt");
+  const fallbackNames = {
+    "searchable-pdf": "searchable.pdf",
+    "canonical-text": "canonical.txt",
+    markdown: "canonical.md",
+  };
+  anchor.download = filenameMatch?.[1] || fallbackNames[artifact] || "artifact";
   document.body.append(anchor);
   anchor.click();
   anchor.remove();
@@ -413,6 +423,15 @@ downloadCanonicalTextButton.addEventListener("click", async () => {
   } catch (error) {
     console.error(error);
     setMessage(error.message || "Could not download the canonical text.", "error");
+  }
+});
+
+downloadMarkdownButton.addEventListener("click", async () => {
+  try {
+    await downloadArtifact("markdown");
+  } catch (error) {
+    console.error(error);
+    setMessage(error.message || "Could not download the structured Markdown.", "error");
   }
 });
 
