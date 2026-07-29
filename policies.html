@@ -9,7 +9,7 @@
       content="Terms of use, privacy policy, prohibited uses, and takedown / rights-infringement contact for the DID/MPD case-literature companion service."
     />
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
-    <link rel="stylesheet" href="./styles.css?v=20260721a" />
+    <link rel="stylesheet" href="./styles.css?v=20260729a" />
   </head>
   <body>
     <div class="site-shell">
@@ -26,6 +26,7 @@
           <a href="./submit.html">Submit a paper</a>
           <a href="./status.html">Track a job</a>
           <a href="./policies.html" aria-current="page">Policies</a>
+          <a href="./index.html#governance">Governance</a>
         </nav>
       </header>
 
@@ -47,126 +48,146 @@
           </div>
         </section>
 
-        <section class="section">
-          <article class="submit-card">
-            <h2>0. Nature of the service</h2>
-            <p>
-              This service, the DID Case-Literature Companion Resource, is <strong>not an official
-              university service</strong>. It is an unofficial service operated privately, for
-              research purposes, by the operator. Neither the operator nor the operator's university
-              bears any responsibility for any damage arising from use of this service. Its purpose
-              is to support review research on DID/MPD case literature. It is not intended to publish
-              or redistribute the full text of copyrighted works.
-            </p>
-
-            <h2>1. What you receive</h2>
-            <p>
-              Your PDF is processed internally by OCR and analysis for review research. What is
-              returned to you is a <strong>research-reference summary with bibliographic details</strong>.
-              The full text, a searchable PDF, and the internal OCR output are not returned. The
-              submitted full text and its OCR output are not published or redistributed; they are held
-              only in a private, token-protected area. The returned summary is not guaranteed to be
-              accurate and may contain errors; consult the original publication for any authoritative use.
-            </p>
-
-            <h2>2. Terms of use</h2>
-            <ul>
-              <li>The service is provided for research use only.</li>
-              <li>It is an unofficial service operated privately, not an official university service.</li>
-              <li>
-                You represent that you have lawful access to the submitted PDF and the rights, or a
-                lawful basis, necessary to provide it for research purposes.
-              </li>
-              <li>
-                The service imposes no additional copyright-based restriction on the returned summary,
-                but does not guarantee its accuracy.
-              </li>
-              <li>
-                Neither the operator nor the operator's university bears any responsibility for damage
-                caused to you or a third party by use of the service, nor gives any warranty as to the
-                accuracy, completeness, or fitness for a particular purpose of the summary or OCR output.
-              </li>
-              <li>If you use this service from outside Japan, you are responsible for complying with the copyright law and other applicable laws of your country.</li>
-            </ul>
-
-            <h2>3. Privacy policy</h2>
-            <ul>
-              <li>
-                <strong>Information collected:</strong> the submitted PDF, the lawful-access
-                confirmation, optionally your name, email address, affiliation, and bibliographic
-                details, the IP address at submission, and an access token used to manage status.
-              </li>
-              <li>
-                <strong>Purposes:</strong> OCR processing and analysis for review research; notifying
-                you of status and returning the summary; preventing misuse (for example, rate limiting).
-              </li>
-              <li>
-                <strong>Data minimisation:</strong> only the PDF and the lawful-access confirmation are
-                required to start processing. Everything else is optional.
-              </li>
-              <li>
-                <strong>Consent:</strong> name, email, and affiliation are collected only when you
-                enter them of your own accord.
-              </li>
-              <li>
-                <strong>Security:</strong> collected information and outputs are protected in a local
-                environment using disk encryption, owner-only access permissions, access control by
-                tokens and an API key, and encrypted backups. They are not held in any public location.
-              </li>
-              <li><strong>Third parties:</strong> provision of your personal data to third parties is not intended.</li>
-              <li><strong>Deletion:</strong> deletion requests are handled through the contact below.</li>
-            </ul>
-
-            <h2>4. Prohibited uses</h2>
-            <ul>
-              <li>Submitting improperly obtained content (copyrighted works obtained without a lawful basis).</li>
-              <li>Submitting or using content in a way that infringes rights without the rights holder's permission.</li>
-              <li>Using the service for purposes other than research.</li>
-              <li>Using the service in a way that violates law or public order.</li>
-              <li>Attempting unauthorised access, imposing excessive load, or otherwise interfering with the service.</li>
-            </ul>
-
-            <h2 id="takedown">5. Takedown &amp; rights-infringement contact</h2>
-            <p>
-              Rights holders may request removal of material, and anyone may report a rights
-              infringement, using the form below. Please include enough detail to identify the item.
-              We will act after review. Requests are also recorded so they are not lost.
-            </p>
-
-            <form id="contact-form" class="submit-form" novalidate>
-              <div class="field">
-                <label for="contact-kind">Request type</label>
-                <select id="contact-kind" name="kind">
-                  <option value="deletion">Deletion request (rights holder)</option>
-                  <option value="infringement">Report a rights infringement</option>
-                  <option value="other">Other / general enquiry</option>
-                </select>
+        <section class="section submit-section">
+          <div class="submit-layout">
+            <section class="submit-card">
+              <div class="section-header submit-header">
+                <div>
+                  <p class="eyebrow">Policies</p>
+                  <h2>Terms of use, privacy, and prohibited uses.</h2>
+                </div>
               </div>
-              <div class="field">
-                <label for="contact-email">Your email (optional, for a reply)</label>
-                <input id="contact-email" name="email" type="email" autocomplete="email" />
-              </div>
-              <div class="field">
-                <label for="contact-target">Item concerned (title, DOI, or job ID)</label>
-                <input id="contact-target" name="target" type="text" />
-              </div>
-              <div class="field">
-                <label for="contact-message">Message</label>
-                <textarea id="contact-message" name="message" rows="5" required></textarea>
-              </div>
-              <input id="contact-website" name="website" type="text" class="honeypot-field" tabindex="-1" autocomplete="off" />
-              <div class="submit-actions">
-                <button id="contact-submit" class="button button-primary" type="submit">Send request</button>
-              </div>
-              <div id="contact-status" class="submit-status" role="status"></div>
-            </form>
-          </article>
+
+              <h3>0. Nature of the service</h3>
+              <p class="policy-text">
+                This service, the DID Case-Literature Companion Resource, is
+                <strong>not an official university service</strong>. It is an unofficial service
+                operated privately, for research purposes, by the operator. Neither the operator nor
+                the operator's university bears any responsibility for any damage arising from use of
+                this service. Its purpose is to support review research on DID/MPD case literature. It
+                is not intended to publish or redistribute the full text of copyrighted works.
+              </p>
+
+              <h3>1. What you receive</h3>
+              <p class="policy-text">
+                Your PDF is processed internally by OCR and analysis for review research. What is
+                returned to you is a <strong>research-reference summary with bibliographic details</strong>.
+                The full text, a searchable PDF, and the internal OCR output are not returned. The
+                submitted full text and its OCR output are not published or redistributed; they are held
+                only in a private, token-protected area. The returned summary is not guaranteed to be
+                accurate and may contain errors; consult the original publication for any authoritative use.
+              </p>
+
+              <h3>2. Terms of use</h3>
+              <ul class="policy-list">
+                <li>The service is provided for research use only.</li>
+                <li>It is an unofficial service operated privately, not an official university service.</li>
+                <li>
+                  You represent that you have lawful access to the submitted PDF and the rights, or a
+                  lawful basis, necessary to provide it for research purposes.
+                </li>
+                <li>
+                  The service imposes no additional copyright-based restriction on the returned summary,
+                  but does not guarantee its accuracy.
+                </li>
+                <li>
+                  Neither the operator nor the operator's university bears any responsibility for damage
+                  caused to you or a third party by use of the service, nor gives any warranty as to the
+                  accuracy, completeness, or fitness for a particular purpose of the summary or OCR output.
+                </li>
+                <li>
+                  If you use this service from outside Japan, you are responsible for complying with the
+                  copyright law and other applicable laws of your country.
+                </li>
+              </ul>
+
+              <h3>3. Privacy policy</h3>
+              <ul class="policy-list">
+                <li>
+                  <strong>Information collected:</strong> the submitted PDF, the lawful-access
+                  confirmation, optionally your name, email address, affiliation, and bibliographic
+                  details, the IP address at submission, and an access token used to manage status.
+                </li>
+                <li>
+                  <strong>Purposes:</strong> OCR processing and analysis for review research; notifying
+                  you of status and returning the summary; preventing misuse (for example, rate limiting).
+                </li>
+                <li>
+                  <strong>Data minimisation:</strong> only the PDF and the lawful-access confirmation are
+                  required to start processing. Everything else is optional.
+                </li>
+                <li>
+                  <strong>Consent:</strong> name, email, and affiliation are collected only when you
+                  enter them of your own accord.
+                </li>
+                <li>
+                  <strong>Security:</strong> collected information and outputs are protected in a local
+                  environment using disk encryption, owner-only access permissions, access control by
+                  tokens and an API key, and encrypted backups. They are not held in any public location.
+                </li>
+                <li><strong>Third parties:</strong> provision of your personal data to third parties is not intended.</li>
+                <li><strong>Deletion:</strong> deletion requests are handled through the form on the right.</li>
+              </ul>
+
+              <h3>4. Prohibited uses</h3>
+              <ul class="policy-list">
+                <li>Submitting improperly obtained content (copyrighted works obtained without a lawful basis).</li>
+                <li>Submitting or using content in a way that infringes rights without the rights holder's permission.</li>
+                <li>Using the service for purposes other than research.</li>
+                <li>Using the service in a way that violates law or public order.</li>
+                <li>Attempting unauthorised access, imposing excessive load, or otherwise interfering with the service.</li>
+              </ul>
+            </section>
+
+            <aside class="submit-side">
+              <article class="governance-card" id="takedown">
+                <h3>Takedown &amp; rights-infringement</h3>
+                <p>
+                  Rights holders may request removal, and anyone may report an infringement, using
+                  this form. Please include enough detail to identify the item. We act after review,
+                  and requests are recorded so they are not lost.
+                </p>
+
+                <form id="contact-form" class="submission-form" novalidate>
+                  <div class="form-grid">
+                    <div class="filter-group filter-group-wide">
+                      <label for="contact-kind">Request type</label>
+                      <select id="contact-kind" name="kind">
+                        <option value="deletion">Deletion request (rights holder)</option>
+                        <option value="infringement">Report a rights infringement</option>
+                        <option value="other">Other / general enquiry</option>
+                      </select>
+                    </div>
+                    <div class="filter-group filter-group-wide">
+                      <label for="contact-email">Your email (optional, for a reply)</label>
+                      <input id="contact-email" name="email" type="email" autocomplete="email" />
+                    </div>
+                    <div class="filter-group filter-group-wide">
+                      <label for="contact-target">Item concerned (title, DOI, or job ID)</label>
+                      <input id="contact-target" name="target" type="text" />
+                    </div>
+                    <div class="filter-group filter-group-wide">
+                      <label for="contact-message">Message</label>
+                      <textarea id="contact-message" name="message" rows="5" required></textarea>
+                    </div>
+                  </div>
+
+                  <input id="contact-website" name="website" type="text" class="honeypot-field" tabindex="-1" autocomplete="off" />
+
+                  <div class="submit-actions">
+                    <button id="contact-submit" class="button button-primary" type="submit">Send request</button>
+                  </div>
+                  <div id="contact-status" class="submit-status" role="status" aria-live="polite" hidden></div>
+                </form>
+              </article>
+            </aside>
+          </div>
         </section>
-      </main>
 
-      <footer class="site-footer">
-        <p>Unofficial research service. Not an official university service.</p>
-      </footer>
+        <footer class="footer">
+          <p>Unofficial research service operated by an individual. Not an official university service.</p>
+        </footer>
+      </main>
     </div>
     <script type="module" src="./policies.js"></script>
   </body>

@@ -1420,3 +1420,25 @@ h3 {
   background: rgba(183, 136, 71, 0.28);
   color: #6d4e1e;
 }
+
+/* Policies page prose: readable line length + consistent heading spacing */
+.submit-card > h3 {
+  margin: 26px 0 8px;
+  font-size: 1.12rem;
+}
+.submit-card > h3:first-of-type {
+  margin-top: 12px;
+}
+.policy-text,
+.policy-list {
+  max-width: 70ch;
+  margin: 0 0 10px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.policy-list {
+  padding-left: 1.25em;
+}
+.policy-list li {
+  margin-bottom: 6px;
+}

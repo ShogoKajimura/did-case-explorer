@@ -17,6 +17,7 @@ function apiBaseUrl() {
 }
 
 function setStatus(message, tone = "neutral") {
+  statusBox.hidden = false;
   statusBox.textContent = message;
   statusBox.dataset.tone = tone;
 }
