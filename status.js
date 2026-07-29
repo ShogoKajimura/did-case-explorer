@@ -18,9 +18,7 @@ const workerState = document.querySelector("#status-state");
 const queuePosition = document.querySelector("#status-queue-position");
 const jobsAhead = document.querySelector("#status-jobs-ahead");
 const detailBox = document.querySelector("#status-detail");
-const downloadSearchablePdfButton = document.querySelector("#download-searchable-pdf");
-const downloadCanonicalTextButton = document.querySelector("#download-canonical-text");
-const downloadMarkdownButton = document.querySelector("#download-markdown");
+const downloadSummaryButton = document.querySelector("#download-summary");
 const copyLinkButton = document.querySelector("#status-copy-link");
 const recentJobsShell = document.querySelector("#recent-jobs");
 const metadataPanel = document.querySelector("#metadata-panel");
@@ -202,15 +200,12 @@ function renderResult(payload) {
   detailBox.textContent = payload.error || payload.screeningMessage || payload.message;
   detailBox.dataset.tone = payload.status === "failed" ? "error" : payload.screeningStatus === "needs_information" ? "warning" : "neutral";
 
-  downloadSearchablePdfButton.disabled = !payload.searchablePdfReady || !payload.downloadsAllowed;
-  downloadCanonicalTextButton.disabled = !payload.canonicalTextReady || !payload.downloadsAllowed;
-  // The structured Markdown is best-effort; only offer it when the backend produced it.
-  const markdownReady = Boolean(payload.canonicalMarkdownReady);
-  downloadMarkdownButton.hidden = !markdownReady;
-  downloadMarkdownButton.disabled = !markdownReady || !payload.downloadsAllowed;
-  downloadNote.textContent = payload.downloadsAllowed
-    ? "Artifacts are available when the buttons below are enabled."
-    : payload.screeningMessage || "Downloads are temporarily held on the restricted backend.";
+  // Summary-only return: the submitter receives a research-reference summary, never full text.
+  const summaryReady = Boolean(payload.summaryReady);
+  downloadSummaryButton.disabled = !summaryReady || !payload.downloadsAllowed;
+  downloadNote.innerHTML = payload.downloadsAllowed
+    ? "This service returns a research-reference <strong>summary</strong> of your submission. It does not return the full text or a searchable PDF."
+    : (payload.screeningMessage || "The summary is temporarily held on the restricted backend.");
   downloadNote.dataset.tone = payload.downloadsAllowed ? "neutral" : "warning";
 }
 
@@ -361,12 +356,7 @@ async function downloadArtifact(artifact) {
 
   const disposition = response.headers.get("Content-Disposition") || "";
   const filenameMatch = disposition.match(/filename=\"?([^"]+)\"?/i);
-  const fallbackNames = {
-    "searchable-pdf": "searchable.pdf",
-    "canonical-text": "canonical.txt",
-    markdown: "canonical.md",
-  };
-  anchor.download = filenameMatch?.[1] || fallbackNames[artifact] || "artifact";
+  anchor.download = filenameMatch?.[1] || "summary.md";
   document.body.append(anchor);
   anchor.click();
   anchor.remove();
@@ -408,30 +398,12 @@ form.addEventListener("submit", (event) => {
   loadStatus();
 });
 
-downloadSearchablePdfButton.addEventListener("click", async () => {
+downloadSummaryButton.addEventListener("click", async () => {
   try {
-    await downloadArtifact("searchable-pdf");
+    await downloadArtifact("summary");
   } catch (error) {
     console.error(error);
-    setMessage(error.message || "Could not download the searchable PDF.", "error");
-  }
-});
-
-downloadCanonicalTextButton.addEventListener("click", async () => {
-  try {
-    await downloadArtifact("canonical-text");
-  } catch (error) {
-    console.error(error);
-    setMessage(error.message || "Could not download the canonical text.", "error");
-  }
-});
-
-downloadMarkdownButton.addEventListener("click", async () => {
-  try {
-    await downloadArtifact("markdown");
-  } catch (error) {
-    console.error(error);
-    setMessage(error.message || "Could not download the structured Markdown.", "error");
+    setMessage(error.message || "Could not download the summary.", "error");
   }
 });
 

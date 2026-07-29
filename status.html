@@ -28,6 +28,7 @@
           <a href="./index.html#visualize">Visualize</a>
           <a href="./submit.html">Submit a paper</a>
           <a href="./status.html" aria-current="page">Track a job</a>
+          <a href="./policies.html">Policies</a>
           <a href="./index.html#governance">Governance</a>
         </nav>
       </header>
@@ -43,8 +44,8 @@
             </p>
             <div class="hero-badges">
               <span class="pill">Token-protected status</span>
-              <span class="pill">Searchable PDF download</span>
-              <span class="pill">Canonical text download</span>
+              <span class="pill">Research-reference summary</span>
+              <span class="pill">Full text not returned</span>
             </div>
           </div>
 
@@ -240,40 +241,26 @@
               <section id="download-panel" class="status-result" hidden>
                 <div class="status-card-header">
                   <div>
-                    <p class="eyebrow">Artifact download</p>
-                    <h3>Download outputs after OCR and relevance checks finish.</h3>
+                    <p class="eyebrow">Summary download</p>
+                    <h3>A research-reference summary is returned once processing finishes.</h3>
                   </div>
-                  <span class="pill">Private artifacts</span>
+                  <span class="pill">Summary only</span>
                 </div>
 
                 <div id="download-note" class="status-detail-box">
-                  Downloads will appear here when the restricted backend marks the job as ready.
+                  This service returns a research-reference <strong>summary</strong> of your
+                  submission. It does not return the full text or a searchable PDF. The full text
+                  is used only internally for the review research and is not redistributed.
                 </div>
 
                 <div class="status-download-grid">
                   <button
-                    id="download-searchable-pdf"
+                    id="download-summary"
                     class="button button-primary"
                     type="button"
                     disabled
                   >
-                    Download searchable PDF
-                  </button>
-                  <button
-                    id="download-canonical-text"
-                    class="button button-secondary"
-                    type="button"
-                    disabled
-                  >
-                    Download canonical text
-                  </button>
-                  <button
-                    id="download-markdown"
-                    class="button button-secondary"
-                    type="button"
-                    disabled
-                  >
-                    Download structured Markdown
+                    Download summary
                   </button>
                 </div>
               </section>

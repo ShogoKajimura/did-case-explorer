@@ -28,6 +28,7 @@
           <a href="./index.html#visualize">Visualize</a>
           <a href="./submit.html" aria-current="page">Submit a paper</a>
           <a href="./status.html">Track a job</a>
+          <a href="./policies.html">Policies</a>
           <a href="./index.html#governance">Governance</a>
         </nav>
       </header>
@@ -191,11 +192,40 @@
                 <input id="website" name="website" type="text" class="honeypot-field" tabindex="-1" autocomplete="off" />
 
                 <div class="submit-consent-grid">
+                  <p class="section-note">
+                    <strong>You will receive a research-reference summary, not the full text or a searchable PDF.</strong>
+                    Your PDF is used only internally for the review research and is not redistributed. This is an
+                    unofficial research service operated by an individual, not an official university service. Neither
+                    the operator nor the operator's university is responsible for the lawfulness of submissions, the
+                    accuracy of the summary, or any use of it. See the
+                    <a href="./policies.html">Terms, Privacy Policy, and Prohibited Uses</a>.
+                  </p>
                   <label class="checkbox-row">
                     <input id="rights-confirmed" name="rights_confirmed" type="checkbox" required />
                     <span>
-                      I confirm that I have lawful access to this PDF and may submit it for restricted OCR
-                      processing and review support.
+                      I confirm that I have lawful access to this PDF and the right, or a lawful basis, to submit it for
+                      research OCR processing. If I am not the rights holder, I am responsible for having a lawful basis.
+                    </span>
+                  </label>
+                  <label class="checkbox-row">
+                    <input id="ack-summary" name="ack_summary" type="checkbox" required />
+                    <span>
+                      I understand that I will receive a <strong>summary</strong>, not a reproduction of the full text,
+                      and that it may contain errors.
+                    </span>
+                  </label>
+                  <label class="checkbox-row">
+                    <input id="ack-overseas" name="ack_overseas" type="checkbox" required />
+                    <span>
+                      If I use this service from outside Japan, I am responsible for complying with the copyright law
+                      of my own country.
+                    </span>
+                  </label>
+                  <label class="checkbox-row">
+                    <input id="ack-terms" name="ack_terms" type="checkbox" required />
+                    <span>
+                      I agree to the <a href="./policies.html">Terms of Use and Privacy Policy</a>, and I consent to the
+                      collection and storage of any name, email, or affiliation I choose to provide.
                     </span>
                   </label>
                 </div>
