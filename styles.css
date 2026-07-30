@@ -1537,3 +1537,27 @@ h3 {
   color: var(--ink-soft);
   line-height: 1.7;
 }
+
+/* Intake notes: three short cards between the hero and the form */
+.intake-notes-section {
+  padding-top: 26px;
+}
+
+.intake-notes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .intake-notes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .intake-notes {
+    grid-template-columns: 1fr;
+  }
+}
