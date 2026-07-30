@@ -52,27 +52,31 @@
 
           <aside class="hero-panel">
             <div class="panel-header">
-              <span>Before you submit</span>
-              <strong>Use this route only when you can lawfully share the PDF.</strong>
+              <span>Read this before you submit</span>
+              <strong>Four things to know.</strong>
             </div>
-            <div class="boundary-grid">
-              <article class="boundary-card boundary-card-public">
-                <h2>Good candidates</h2>
-                <ul>
-                  <li>Non-English case reports or case series</li>
-                  <li>Scanned journal articles and theses</li>
-                  <li>Materials you authored or can lawfully share for research processing</li>
-                </ul>
-              </article>
-              <article class="boundary-card boundary-card-restricted">
-                <h2>Not uploaded publicly</h2>
-                <ul>
-                  <li>Copyrighted full text on the public explorer</li>
-                  <li>Private OCR artifacts without permission</li>
-                  <li>Contributor identity unless opt-in is selected</li>
-                </ul>
-              </article>
-            </div>
+            <ol class="keypoints">
+              <li>
+                <b>Published literature only.</b> Do not send unpublished clinical records or
+                patient files.
+              </li>
+              <li>
+                <b>You receive a summary PDF</b>, not the full text and not a searchable PDF of
+                your original.
+              </li>
+              <li>
+                <b>Your file is deleted.</b> The upload within 90 days, material derived from it
+                within 24 months.
+              </li>
+              <li>
+                <b>This is an unofficial service</b> run by an individual, not by the university.
+                Neither accepts responsibility for the lawfulness of a submission, the accuracy of
+                the summary, or any disadvantage arising from use.
+              </li>
+            </ol>
+            <p class="keypoints-more">
+              Full detail: <a href="./policies.html">Terms of Use, Privacy Policy, and Prohibited Uses</a>
+            </p>
           </aside>
         </section>
 
@@ -85,9 +89,8 @@
                   <h2>Submit one PDF at a time.</h2>
                 </div>
                 <p class="section-note">
-                  Minimal submission is intentional. Only the PDF and the lawful-access
-                  confirmation are required to start OCR. Optional bibliographic or
-                  contributor details can be added now or later from the private status page.
+                  Only the PDF and the confirmations below are required. Anything else is optional
+                  and can be added later from your private status page.
                 </p>
               </div>
 
@@ -192,16 +195,8 @@
                 <input id="website" name="website" type="text" class="honeypot-field" tabindex="-1" autocomplete="off" />
 
                 <div class="submit-consent-grid">
-                  <p class="section-note">
-                    <strong>Submit already-published academic literature only.</strong> Do not submit unpublished
-                    clinical records or patient files.
-                    <strong>You will receive a research-reference summary as a PDF, not the full text or a searchable PDF of the original.</strong>
-                    Your PDF is used only internally for the review research and is not redistributed, and it is
-                    deleted within 90 days (derived material within 24 months). This is an unofficial research service
-                    operated by an individual, not an official university service. Neither the operator nor the
-                    operator's university is responsible for the lawfulness of submissions, the accuracy of the
-                    summary, or any disadvantage arising from use of this service. See the
-                    <a href="./policies.html">Terms, Privacy Policy, and Prohibited Uses</a>.
+                  <p class="consent-lead">
+                    Confirm each of the following, then submit.
                   </p>
                   <label class="checkbox-row">
                     <input id="rights-confirmed" name="rights_confirmed" type="checkbox" required />
@@ -279,30 +274,25 @@
 
             <aside class="submit-side">
               <article class="governance-card">
-                <h3>What happens after upload</h3>
-                <p>
-                  The restricted backend stores the PDF privately, creates a job record,
-                  generates a searchable PDF, and extracts canonical OCR text. After
-                  submission, this site provides a private status page for progress
-                  tracking and artifact download. If OCR does not detect clear DID/MPD
-                  relevance, downloads can be held pending bibliographic clarification
-                  or curator review. Public release, if any, is handled separately and
-                  conservatively.
-                </p>
+                <h3>What to send</h3>
+                <ul>
+                  <li>Non-English case reports or case series</li>
+                  <li>Scanned journal articles and theses</li>
+                  <li>Work you authored, or may lawfully share for research processing</li>
+                </ul>
               </article>
               <article class="governance-card">
-                <h3>What this page does not do</h3>
+                <h3>After upload</h3>
                 <p>
-                  It does not publish your uploaded file, promise immediate human review,
-                  or expose copyrighted full text through the public explorer.
+                  You get a private status link. When processing finishes, the summary PDF can be
+                  downloaded there. Your file is never published through this site.
                 </p>
               </article>
               <article class="governance-card">
                 <h3>Contributor credit</h3>
                 <p>
-                  If you later choose to enter a public contributor name, the explorer can
-                  display that name and optionally link it to a homepage, lab page, or
-                  ORCID profile. Leaving those fields blank keeps the contribution private.
+                  Enter a public contributor name only if you want it displayed on the explorer.
+                  Leave it blank to keep the contribution private.
                 </p>
               </article>
             </aside>

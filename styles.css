@@ -1478,3 +1478,62 @@ h3 {
 .hero-panel .submit-actions {
   margin-top: 4px;
 }
+
+/* Submit page: the four things a contributor must actually read, in the hero panel */
+.keypoints {
+  margin: 16px 0 12px;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: keypoint;
+  display: grid;
+  gap: 11px;
+}
+
+.keypoints > li {
+  counter-increment: keypoint;
+  position: relative;
+  padding-left: 30px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.keypoints > li::before {
+  content: counter(keypoint);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.keypoints > li b {
+  color: var(--ink);
+}
+
+.keypoints-more {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+/* Single instruction directly above the confirmations, where the eye already is */
+.consent-lead {
+  margin: 2px 0 2px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.governance-card ul {
+  margin: 8px 0 0;
+  padding-left: 1.2em;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
