@@ -9,7 +9,7 @@
       content="Terms of use, privacy policy, prohibited uses, and takedown / rights-infringement contact for the DID/MPD case-literature companion service."
     />
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
-    <link rel="stylesheet" href="./styles.css?v=20260729a" />
+    <link rel="stylesheet" href="./styles.css?v=20260730b" />
   </head>
   <body>
     <div class="site-shell">
@@ -46,10 +46,52 @@
               <span class="pill">Takedown window</span>
             </div>
           </div>
+
+          <aside class="hero-panel" id="takedown">
+            <div class="panel-header">
+              <span>Takedown &amp; rights-infringement</span>
+              <strong>Rights holders may request removal; anyone may report an infringement.</strong>
+            </div>
+            <p class="section-note">
+              Include enough detail to identify the item. We act after review, and requests are
+              recorded so they are not lost.
+            </p>
+    <form id="contact-form" class="submission-form" novalidate>
+                      <div class="form-grid">
+                        <div class="filter-group filter-group-wide">
+                          <label for="contact-kind">Request type</label>
+                          <select id="contact-kind" name="kind">
+                            <option value="deletion">Deletion request (rights holder)</option>
+                            <option value="infringement">Report a rights infringement</option>
+                            <option value="other">Other / general enquiry</option>
+                          </select>
+                        </div>
+                        <div class="filter-group filter-group-wide">
+                          <label for="contact-email">Your email (optional, for a reply)</label>
+                          <input id="contact-email" name="email" type="email" autocomplete="email" />
+                        </div>
+                        <div class="filter-group filter-group-wide">
+                          <label for="contact-target">Item concerned (title, DOI, or job ID)</label>
+                          <input id="contact-target" name="target" type="text" />
+                        </div>
+                        <div class="filter-group filter-group-wide">
+                          <label for="contact-message">Message</label>
+                          <textarea id="contact-message" name="message" rows="5" required></textarea>
+                        </div>
+                      </div>
+
+                      <input id="contact-website" name="website" type="text" class="honeypot-field" tabindex="-1" autocomplete="off" />
+
+                      <div class="submit-actions">
+                        <button id="contact-submit" class="button button-primary" type="submit">Send request</button>
+                      </div>
+                      <div id="contact-status" class="submit-status" role="status" aria-live="polite" hidden></div>
+                    </form>
+          </aside>
         </section>
 
         <section class="section submit-section">
-          <div class="submit-layout">
+          <div class="policy-full">
             <section class="submit-card">
               <div class="section-header submit-header">
                 <div>
@@ -180,48 +222,6 @@
               </ul>
             </section>
 
-            <aside class="submit-side">
-              <article class="governance-card" id="takedown">
-                <h3>Takedown &amp; rights-infringement</h3>
-                <p>
-                  Rights holders may request removal, and anyone may report an infringement, using
-                  this form. Please include enough detail to identify the item. We act after review,
-                  and requests are recorded so they are not lost.
-                </p>
-
-                <form id="contact-form" class="submission-form" novalidate>
-                  <div class="form-grid">
-                    <div class="filter-group filter-group-wide">
-                      <label for="contact-kind">Request type</label>
-                      <select id="contact-kind" name="kind">
-                        <option value="deletion">Deletion request (rights holder)</option>
-                        <option value="infringement">Report a rights infringement</option>
-                        <option value="other">Other / general enquiry</option>
-                      </select>
-                    </div>
-                    <div class="filter-group filter-group-wide">
-                      <label for="contact-email">Your email (optional, for a reply)</label>
-                      <input id="contact-email" name="email" type="email" autocomplete="email" />
-                    </div>
-                    <div class="filter-group filter-group-wide">
-                      <label for="contact-target">Item concerned (title, DOI, or job ID)</label>
-                      <input id="contact-target" name="target" type="text" />
-                    </div>
-                    <div class="filter-group filter-group-wide">
-                      <label for="contact-message">Message</label>
-                      <textarea id="contact-message" name="message" rows="5" required></textarea>
-                    </div>
-                  </div>
-
-                  <input id="contact-website" name="website" type="text" class="honeypot-field" tabindex="-1" autocomplete="off" />
-
-                  <div class="submit-actions">
-                    <button id="contact-submit" class="button button-primary" type="submit">Send request</button>
-                  </div>
-                  <div id="contact-status" class="submit-status" role="status" aria-live="polite" hidden></div>
-                </form>
-              </article>
-            </aside>
           </div>
         </section>
 

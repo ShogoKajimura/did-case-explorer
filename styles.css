@@ -1429,16 +1429,52 @@ h3 {
 .submit-card > h3:first-of-type {
   margin-top: 12px;
 }
-.policy-text,
-.policy-list {
-  max-width: 70ch;
+.policy-full {
+  display: block;
+}
+
+/* Full-width policy card: use the available width instead of wrapping every line,
+   but keep each line readable by flowing the long lists into columns. */
+.policy-text {
+  max-width: none;
   margin: 0 0 10px;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--ink-soft);
+}
+
+.policy-list {
+  max-width: none;
+  margin: 0 0 12px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  columns: 2;
+  column-gap: 42px;
+}
+
+.policy-list > li {
+  break-inside: avoid;
+}
+
+@media (max-width: 900px) {
+  .policy-list {
+    columns: 1;
+  }
 }
 .policy-list {
   padding-left: 1.25em;
 }
 .policy-list li {
   margin-bottom: 6px;
+}
+
+/* Takedown form sitting in the hero's right-hand panel */
+.hero-panel .submission-form {
+  margin-top: 14px;
+}
+.hero-panel .form-grid {
+  display: grid;
+  gap: 0;
+}
+.hero-panel .submit-actions {
+  margin-top: 4px;
 }
